@@ -273,11 +273,11 @@ export default function QuotationDetailsPage() {
 
       {/* Hidden PDF Template (also used for Printing) */}
       <style type="text/css" media="print">
-        {`@page { margin: 15mm 0; }`}
+        {`@page { margin: 0; }`}
       </style>
       <div className="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none print:static print:opacity-100 print:z-auto print:pointer-events-auto overflow-hidden h-0 print:h-auto print:overflow-visible">
         <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "1px" }}>
-          <div className="p-[20mm] print:px-[20mm] print:py-0">
+          <div className="p-[20mm] print:px-[20mm] print:py-[15mm]">
             {/* Header */}
             <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #3b82f6" }}>
               <div className="flex items-center gap-4">
