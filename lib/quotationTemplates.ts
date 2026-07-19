@@ -1,0 +1,195 @@
+export interface QuotationTemplate {
+  title: string;
+  subtitle?: string;
+  sections: {
+    heading: string;
+    items: string[];
+  }[];
+}
+
+export const quotationTemplates: Record<string, QuotationTemplate> = {
+  "Website Development": {
+    title: "WEBSITE SERVICE",
+    subtitle: "TRAVEL - STANDARD WEBSITE DESIGN INCLUDES :",
+    sections: [
+      {
+        heading: "FEATURE INCLUDES :",
+        items: [
+          "HOME PAGE, ABOUT US, DESTINATION, TOUR PACKAGES, CLIENT TESTIMONIAL, TERMS AND CONDITIONS, ONLINE ENQUIRY, CONTACT US.",
+          "CHAT INTEGRATION: WHATSAPP.",
+          "INTEGRATED BACK-END SOFTWARE FOR: ADD, EDIT, DELETE TOUR PACKAGE, DESTINATION, CLIENT TESTIMONIAL, ONLINE ENQUIRY, CONTACT US.",
+          "20 - 25 NOS. BASIC PAGES INCLUDE.",
+          "25 NOS. TOUR PACKAGES INCLUDE.",
+          "LOGO DESIGNING INCLUDING.",
+          "EXCLUSIVE BANNER AND INNER DESIGN",
+          "MOBILE RESPONSIVE LAYOUT.",
+          "PROPER CTA BUTTON WITH ENQUIRY FORM ON EVERY PAGE.",
+          "META DESCRIPTION FOR EACH PAGE",
+          "2 EMAIL IDS WITH WEBMAIL.",
+          "FREE DOMAIN FOR 1 YEAR",
+          "FREE WEB HOSTING FOR 1 YEAR",
+          "SSL CERTIFICATE FOR 1 YEAR",
+          "GOOGLE BUSINESS LISTING / MAP INTEGRATION WITH WEBSITE.",
+          "WHATSAPP CHAT INTEGRATED WITH WEBSITE.",
+          "MAINTENANCE FREE FOR 1 YEAR."
+        ]
+      },
+      {
+        heading: "PROJECT DELIVERABLES :",
+        items: [
+          "INCLUDE SOCIAL MEDIA INTEGRATION:",
+          "LINK WITH FACEBOOK PAGE.",
+          "LINK WITH YOUTUBE CHANNEL.",
+          "LINK WITH INSTAGRAM PAGE."
+        ]
+      },
+      {
+        heading: "IMPORTANT NOTE :",
+        items: [
+          "TECHNOLOGY USED CLIENTSIDE SCRIPTING : HTML, CSS",
+          "TECHNOLOGY USED SERVER-SIDE SCRIPTING: PHP / NODEJS",
+          "DATABASE SYSTEM USED IN PROJECT: MySQL / PostgreSQL"
+        ]
+      },
+      {
+        heading: "SCHEDULE TIME FRAME & PROJECT DURATION :",
+        items: [
+          "2 Week for concept development."
+        ]
+      },
+      {
+        heading: "PROJECT PAYMENT TERMS :",
+        items: [
+          "PROJECT START WITH 50% ADVANCE & REST 50% PAYMENT ON DAY OF PROJECT LIVE.",
+          "DOMAIN / HOSTING / SSL RENEWAL WITH 1 YEAR MAINTENANCE INCLUDING."
+        ]
+      },
+      {
+        heading: "TERMS & CONDITIONS :",
+        items: [
+          "THE INFORMATION PROVIDED AND MAY BE INAPPROPRIATE IF ADDITIONAL INFORMATION IS FORTHCOMING, OR SPECIFICATIONS CHANGE.",
+          "DIGITAL DICTIONARY DOES NOT REMOVE THEIR CREATIVE DESIGN TAG FROM BOTTOM OF THE WEBSITE.",
+          "IF CUSTOMERS HAND OVER THEIR CPANEL THEN WE ARE NOT RESPONSIBLE FOR THAT PARTICULAR PROJECT.",
+          "AFTER HANDOVER CPANEL WE REQUEST TO TRANSFER THE WEBSITE TO THE CLIENTS OWN SERVER."
+        ]
+      }
+    ]
+  },
+  "Google Ads / Meta Ads": {
+    title: "GOOGLE AD SERVICE",
+    subtitle: "STARTER PACKAGE INCLUDES :",
+    sections: [
+      {
+        heading: "FEATURE INCLUDES :",
+        items: [
+          "ESTIMATED 1400-1500 CLICKS",
+          "DELIVER IN 15 LOCATIONS.",
+          "KEYWORD STRENGTH 30 NOS.",
+          "INCREASE WEBSITE CLICKS.",
+          "INCREASE BRAND IMPRESSIONS.",
+          "INCREASE WEBSITE ENQUIRIES.",
+          "INCREASE ADMISSION-RELATED QUERIES ON THE PHONE.",
+          "THIS ADVERTISEMENT ONLY RUNS ON GOOGLE AND THEIR PARTNER PLATFORM.",
+          "GOOGLE TEXT ADS",
+          "GOOGLE MY BUSINESS ADS",
+          "GOOGLE CALL ADS"
+        ]
+      },
+      {
+        heading: "PROJECT DELIVERABLES :",
+        items: [
+          "GOOGLE MY BUSINESS PAGE MANAGEMENT.",
+          "CONVERSION TREKKING CODE INSTALLED",
+          "ADS TOPICS ON GOOGLE: BUSINESS-RELATED ADS ONLY.",
+          "MONTHLY ADVERTISEMENT REPORT SEND VIA MAIL (PDF FORMAT)"
+        ]
+      },
+      {
+        heading: "IMPORTANT NOTE :",
+        items: [
+          "DELIVER ONLY 15 LOCATIONS (AS PRE-DISCUSSED)."
+        ]
+      },
+      {
+        heading: "SCHEDULE TIME FRAME & PROJECT DURATION :",
+        items: [
+          "1 Month for concept development and execution."
+        ]
+      },
+      {
+        heading: "PROJECT PAYMENT TERMS :",
+        items: [
+          "GOOGLE AD PAYMENT ADVANCE PER MONTH."
+        ]
+      },
+      {
+        heading: "TERMS & CONDITIONS :",
+        items: [
+          "THE INFORMATION PROVIDED MAY BE INAPPROPRIATE IF ADDITIONAL INFORMATION IS FORTHCOMING, OR SPECIFICATIONS CHANGE.",
+          "AUTHORISATION TO USE CLIENT PICTURES, LOGOS, TRADEMARKS, WEBSITE IMAGES, PAMPHLETS, CONTENT, ETC.",
+          "ADVERTISEMENT CAMPAIGN OR STRATEGY WILL NOT BE HANDED OVER TO THE CLIENTS.",
+          "ALL FEES ARE NON-REFUNDABLE.",
+          "WE ARE NOT WORK ON 3RD SATURDAY AND SUNDAYS.",
+          "ALL FEES, SERVICES, DOCUMENTS, RECOMMENDATIONS, AND REPORTS ARE CONFIDENTIAL.",
+          "DIGITAL DICTIONARY DOES NOT REMOVE THEIR DESIGN TAG FROM CREATIVE."
+        ]
+      }
+    ]
+  },
+  "SEO": {
+    title: "SEO SERVICE",
+    subtitle: "STANDARD SEO PACKAGE INCLUDES :",
+    sections: [
+      {
+        heading: "FEATURE INCLUDES :",
+        items: [
+          "KEYWORD RESEARCH – BEST 5 KEYWORDS FROM YOUR BUSINESS LOCATION",
+          "OPTIMIZE THE TARGET PAGES WITH URL, TITLE, DESCRIPTION, IMAGE ETC.",
+          "BUSINESS LISTINGS OPTIMIZATION FOR LOCAL LISTING.",
+          "CREATE SITEMAP INTEGRATION AND ROBOTS.TXT FOR GOOGLE CRAWLING.",
+          "ONPAGE & OFF-PAGE OPTIMIZATION",
+          "SEO AUDIT REPORT FOR THE WEBSITE",
+          "SOCIAL SHARING WITH FACEBOOK, INSTAGRAM, YOUTUBE, X.",
+          "MONTHLY NO. OF WEB BLOG POSTING: 2 NOS.",
+          "MONTHLY NO. OF EXTERNAL BLOG POSTING: 2 NOS.",
+          "MONTHLY NO. OF ARTICLE POSTING: 2 NOS.",
+          "ON-PAGE CONTENT PLAN INCLUDED. ALL CONTENT IS PLAGIARISM CHECKED.",
+          "SOCIAL POSTING FORMAT: GENERAL POST, STORIES, POST, MICRO VIDEO",
+          "CREATE A PROPER LINK-BUILDING PLAN."
+        ]
+      },
+      {
+        heading: "PROJECT DELIVERABLES :",
+        items: [
+          "MONTHLY GOOGLE MY BUSINESS POSTING: 2 NOS.",
+          "1 REEL OR MICRO VIDEO PER MONTH.",
+          "NOTE: SOCIAL MEDIA POST TOTAL: 6 NOS."
+        ]
+      },
+      {
+        heading: "SCHEDULE TIME FRAME & PROJECT DURATION :",
+        items: [
+          "12 Months for concept development."
+        ]
+      },
+      {
+        heading: "PROJECT PAYMENT TERMS :",
+        items: [
+          "TOTAL PROJECT DURATION FOR GOOGLE FIRST PAGE RANK: 12 MONTHS.",
+          "MINIMUM DURATION FOR KEYWORD VISIBILITY ON GOOGLE: 6 MONTHS.",
+          "SEO PAYMENT ADVANCE PER MONTH."
+        ]
+      },
+      {
+        heading: "TERMS & CONDITIONS :",
+        items: [
+          "ADMINISTRATIVE/BACKEND ACCESS TO THE WEBSITE FOR ANALYSIS OF CONTENT AND STRUCTURE.",
+          "UNLIMITED ACCESS TO EXISTING WEBSITE TRAFFIC STATISTICS FOR ANALYSIS AND TRACKING PURPOSES.",
+          "ALL FEES ARE NON-REFUNDABLE.",
+          "ALL FEES, SERVICES, DOCUMENTS, RECOMMENDATIONS, AND REPORTS ARE CONFIDENTIAL.",
+          "DUE TO THE COMPETITIVENESS OF SOME KEYWORDS/PHRASES, ONGOING CHANGES IN SEARCH ENGINE RANKING ALGORITHMS, AND OTHER COMPETITIVE FACTORS, DIGITAL DICTIONARY DOES NOT GUARANTEE #1 POSITIONS."
+        ]
+      }
+    ]
+  }
+};
