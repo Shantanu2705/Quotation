@@ -84,7 +84,7 @@ export default function QuotationDetailsPage() {
       
       const html2pdf = (await import('html2pdf.js')).default;
       
-      const opt = {
+      const opt: any = {
         margin: [15, 0, 15, 0], // top, left, bottom, right
         filename: `${quotation.serialNumber}_Quotation.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
