@@ -272,11 +272,11 @@ export default function QuotationDetailsPage() {
       </div>
 
       {/* Hidden PDF Template (also used for Printing) */}
+      <style type="text/css" media="print">
+        {`@page { margin: 15mm 0; }`}
+      </style>
       <div className="absolute -top-[9999px] -left-[9999px] print:static print:top-auto print:left-auto print:transform-none">
         <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif", paddingBottom: "1px" }}>
-          <style type="text/css" media="print">
-            {`@page { margin: 15mm 0; }`}
-          </style>
           <div className="p-[20mm] print:px-[20mm] print:py-0">
             {/* Header */}
             <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #3b82f6" }}>
@@ -312,9 +312,9 @@ export default function QuotationDetailsPage() {
             </div>
 
             {/* Boilerplate or Requirements */}
-            <div className="mb-12">
+            <>
               {currentTemplate ? (
-                <div className="space-y-6">
+                <>
                   {currentTemplate.servicePackage && (
                     <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SERVICE PACKAGE INCLUDES :</h4>
@@ -357,7 +357,7 @@ export default function QuotationDetailsPage() {
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.termsAndConditions}</div>
                     </div>
                   )}
-                </div>
+                </>
               ) : (
                 <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                   <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>REQUIREMENTS & SCOPE :</h4>
@@ -366,7 +366,7 @@ export default function QuotationDetailsPage() {
                   </div>
                 </div>
               )}
-            </div>
+            </>
             
             {/* Spacer to push footer down */}
             <div style={{ flexGrow: 1 }}></div>
