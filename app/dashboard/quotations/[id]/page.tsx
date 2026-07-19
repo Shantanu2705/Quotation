@@ -76,12 +76,6 @@ export default function QuotationDetailsPage() {
       setIsGeneratingPdf(true);
       const element = printRef.current;
       
-      // Hide thead and tfoot so they don't add double margins in the canvas
-      const thead = element.querySelector('thead');
-      const tfoot = element.querySelector('tfoot');
-      if (thead) thead.style.display = 'none';
-      if (tfoot) tfoot.style.display = 'none';
-      
       const html2pdf = (await import('html2pdf.js')).default;
       
       const opt: any = {
@@ -94,10 +88,6 @@ export default function QuotationDetailsPage() {
       };
       
       await html2pdf().set(opt).from(element).save();
-      
-      // Restore styles
-      if (thead) thead.style.display = '';
-      if (tfoot) tfoot.style.display = '';
       
       setIsGeneratingPdf(false);
       toast.success("PDF downloaded successfully!");
@@ -283,20 +273,11 @@ export default function QuotationDetailsPage() {
 
       {/* Hidden PDF Template (also used for Printing) */}
       <div className="absolute -top-[9999px] -left-[9999px] print:static print:top-auto print:left-auto print:transform-none">
-        <div ref={printRef} className="print:block w-[794px] print:w-full">
+        <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif", paddingBottom: "1px" }}>
           <style type="text/css" media="print">
-            {`@page { margin: 0; }`}
+            {`@page { margin: 15mm 0; }`}
           </style>
-          <table 
-            className="w-[210mm] max-w-full min-h-[297mm] print:w-full print:min-h-0"
-            style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif" }}
-          >
-            <thead className="print:table-header-group">
-              <tr><td><div className="h-[15mm]" /></td></tr>
-            </thead>
-            <tbody className="print:table-row-group">
-              <tr>
-                <td className="p-[20mm] print:px-[20mm] print:py-0 align-top">
+          <div className="p-[20mm] print:px-[20mm] print:py-0">
             {/* Header */}
             <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #3b82f6" }}>
               <div className="flex items-center gap-4">
@@ -406,13 +387,7 @@ export default function QuotationDetailsPage() {
             <div className="text-center text-xs mt-auto pt-4" style={{ color: "#3b82f6", borderTop: "1px solid #bfdbfe" }}>
               📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
             </div>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot className="print:table-footer-group">
-              <tr><td><div className="h-[15mm]" /></td></tr>
-            </tfoot>
-          </table>
+          </div>
         </div>
       </div>
     </div>
