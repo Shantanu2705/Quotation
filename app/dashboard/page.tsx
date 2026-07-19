@@ -21,8 +21,16 @@ export default function DashboardPage() {
   const confirmedBookings = quotations.filter(q => 
     q.paymentStatus === 'Payment Confirmed' || q.paymentStatus === 'Advance Payment Confirmed'
   ).length;
-  const totalClients = new Set(enquiries.map(e => e.mobileNumber?.trim().toLowerCase() || e.customerName?.trim().toLowerCase())).size;
-
+  const clientSet = new Set<string>();
+  enquiries.forEach(e => {
+    const key = e.mobileNumber?.trim().toLowerCase() || e.customerName?.trim().toLowerCase();
+    if (key) clientSet.add(key);
+  });
+  quotations.forEach(q => {
+    const key = q.customerName?.trim().toLowerCase();
+    if (key) clientSet.add(key);
+  });
+  const totalClients = clientSet.size;
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

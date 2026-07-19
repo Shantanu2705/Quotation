@@ -90,7 +90,7 @@ export default function QuotationDetailsPage() {
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, logging: false, windowWidth: 794 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], avoid: '.print\\:break-inside-avoid' }
+        pagebreak: { mode: 'legacy', avoid: '.pdf-no-break' }
       };
       
       await html2pdf().set(opt).from(element).save();
@@ -316,7 +316,7 @@ export default function QuotationDetailsPage() {
             </div>
 
             {/* Customer */}
-            <div className="mb-10 print:break-inside-avoid">
+            <div className="mb-10 print:break-inside-avoid pdf-no-break">
               <h3 className="text-sm mb-1 uppercase tracking-wider" style={{ color: "#1e293b" }}>CUSTOMER DETAILS :</h3>
               <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{formData.customerName || "Customer Name"}</p>
               <p className="m-0 uppercase" style={{ color: "#1e293b" }}>{formData.email || "NO EMAIL PROVIDED"}</p>
@@ -324,7 +324,7 @@ export default function QuotationDetailsPage() {
             </div>
 
             {/* Service Title */}
-            <div className="mb-6 print:break-inside-avoid print:mt-8">
+            <div className="mb-6 print:break-inside-avoid pdf-no-break print:mt-8">
               <h2 className="text-xl font-bold uppercase m-0" style={{ color: "#0369a1" }}>
                 {currentTemplate?.id || `${formData.serviceType.toUpperCase()} SERVICE`}
               </h2>
@@ -335,50 +335,50 @@ export default function QuotationDetailsPage() {
               {currentTemplate ? (
                 <div className="space-y-6">
                   {currentTemplate.servicePackage && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SERVICE PACKAGE INCLUDES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.servicePackage}</div>
                     </div>
                   )}
                   {currentTemplate.projectDeliverables && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>PROJECT DELIVERABLES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectDeliverables}</div>
                     </div>
                   )}
                   {currentTemplate.importantNote && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>IMPORTANT NOTE :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.importantNote}</div>
                     </div>
                   )}
                   {currentTemplate.scheduleTimeFrame && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SCHEDULE TIME FRAME & PROJECT DURATION :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.scheduleTimeFrame}</div>
                     </div>
                   )}
                   {currentTemplate.projectPaymentTerms && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>PROJECT PAYMENT TERMS :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectPaymentTerms}</div>
                     </div>
                   )}
                   {currentTemplate.sampleOrCaseStudies && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SAMPLE OR CASE STUDIES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.sampleOrCaseStudies}</div>
                     </div>
                   )}
                   {currentTemplate.termsAndConditions && (
-                    <div className="mb-6 print:break-inside-avoid print:pt-4">
+                    <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>TERMS & CONDITIONS :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.termsAndConditions}</div>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="mb-6 print:break-inside-avoid print:pt-4">
+                <div className="mb-6 print:break-inside-avoid pdf-no-break print:pt-4">
                   <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>REQUIREMENTS & SCOPE :</h4>
                   <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>
                     {formData.requirements || "No specific requirements provided."}
@@ -391,7 +391,7 @@ export default function QuotationDetailsPage() {
             <div style={{ flexGrow: 1 }}></div>
 
             {/* Footer content - Amount and Sign */}
-            <div className="flex justify-between items-end mt-12 mb-8 pt-8 print:break-inside-avoid" style={{ borderTop: "1px solid #e2e8f0" }}>
+            <div className="flex justify-between items-end mt-12 mb-8 pt-8 print:break-inside-avoid pdf-no-break" style={{ borderTop: "1px solid #e2e8f0" }}>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold" style={{ color: "#000000" }}>Amount:</span>
                 <span className="text-2xl font-black" style={{ color: "#000000" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
