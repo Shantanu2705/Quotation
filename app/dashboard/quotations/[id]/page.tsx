@@ -339,6 +339,10 @@ export default function QuotationDetailsPage() {
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.scheduleTimeFrame}</div>
                     </div>
                   )}
+                  
+                  {/* MANUAL PAGE BREAK TO FIX VERCEL RENDERING BUG */}
+                  <div className="html2pdf__page-break"></div>
+                  
                   {currentTemplate.projectPaymentTerms && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>PROJECT PAYMENT TERMS :</h4>
