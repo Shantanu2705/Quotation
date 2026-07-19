@@ -16,7 +16,8 @@ export default function TemplatesPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<ServiceTemplate>>({});
 
-  const handleServiceChange = (serviceId: string) => {
+  const handleServiceChange = (serviceId: string | null) => {
+    if (!serviceId) return;
     setSelectedService(serviceId);
     const template = templates.find(t => t.id === serviceId);
     if (template) {
