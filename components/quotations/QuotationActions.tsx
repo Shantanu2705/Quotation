@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Printer, Download, MessageCircle, Mail, ArrowLeft, Settings2 } from "lucide-react";
+import { Download, MessageCircle, Mail, ArrowLeft, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { Quotation } from "@/hooks/useQuotations";
 import { Enquiry } from "@/hooks/useEnquiries";
@@ -33,10 +33,6 @@ export function QuotationActions({ quotation, enquiry, onDownloadPdf, isGenerati
     window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_blank");
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-background border-b border-border p-4 sticky top-0 z-10 print:hidden">
       <div className="flex items-center gap-4">
@@ -59,11 +55,7 @@ export function QuotationActions({ quotation, enquiry, onDownloadPdf, isGenerati
           Email
         </Button>
         
-        <Button variant="outline" size="sm" className="h-9 gap-2 bg-background" onClick={handlePrint}>
-          <Printer className="h-4 w-4" />
-          Print
-        </Button>
-        
+
         <Button 
           className="h-9 gap-2 bg-amber-500 hover:bg-amber-600 text-white border-none" 
           onClick={onDownloadPdf}

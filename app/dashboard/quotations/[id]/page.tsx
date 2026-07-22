@@ -76,10 +76,28 @@ export default function QuotationDetailsPage() {
       setIsGeneratingPdf(true);
       const element = printRef.current;
       
+      const wmImg = document.getElementById('watermark-img') as HTMLImageElement;
+      let wmBase64 = '';
+      let wmWidth = 0;
+      let wmHeight = 0;
+      if (wmImg && wmImg.complete) {
+        const canvas = document.createElement('canvas');
+        canvas.width = wmImg.naturalWidth;
+        canvas.height = wmImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.filter = 'grayscale(100%) opacity(10%)';
+          ctx.drawImage(wmImg, 0, 0);
+          wmBase64 = canvas.toDataURL('image/png');
+          wmWidth = wmImg.naturalWidth;
+          wmHeight = wmImg.naturalHeight;
+        }
+      }
+      
       const html2pdf = (await import('html2pdf.js')).default;
       
       const opt: any = {
-        margin: [15, 0, 15, 0], // top, left, bottom, right
+        margin: [12, 0, 12, 0],
         filename: `${quotation.serialNumber}_Quotation.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, logging: false, windowWidth: 794 },
@@ -87,7 +105,25 @@ export default function QuotationDetailsPage() {
         pagebreak: { mode: ['css', 'legacy'] }
       };
       
-      await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
+        const totalPages = pdf.internal.getNumberOfPages();
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          
+          pdf.setDrawColor(218, 165, 32);
+          pdf.setLineWidth(2);
+          pdf.rect(5, 5, pdfWidth - 10, pdfHeight - 10);
+          
+          if (wmBase64 && wmWidth > 0) {
+            const w = 150;
+            const h = (wmHeight * w) / wmWidth;
+            pdf.addImage(wmBase64, 'PNG', (pdfWidth - w) / 2, (pdfHeight - h) / 2, w, h);
+          }
+        }
+      }).save();
       
       setIsGeneratingPdf(false);
       toast.success("PDF downloaded successfully!");
@@ -272,14 +308,15 @@ export default function QuotationDetailsPage() {
       </div>
 
       {/* Hidden PDF Template (also used for Printing) */}
+      <img id="watermark-img" src="/watermark.png" style={{ display: 'none' }} crossOrigin="anonymous" alt="watermark hidden" />
       <style type="text/css" media="print">
         {`@page { margin: 0; }`}
       </style>
       <div className="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none print:static print:opacity-100 print:z-auto print:pointer-events-auto overflow-hidden h-0 print:h-auto print:overflow-visible">
-        <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "1px" }}>
-          <div className="p-[20mm] print:px-[20mm] print:py-[15mm]">
+        <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "1px", boxSizing: "border-box" }}>
+          <div style={{ padding: "0 15mm" }}>
             {/* Header */}
-            <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #3b82f6" }}>
+            <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #DAA520" }}>
               <div className="flex items-center gap-4">
                 <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
               </div>
@@ -291,7 +328,7 @@ export default function QuotationDetailsPage() {
             </div>
 
             {/* Meta */}
-            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#0369a1" }}>
+            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#DAA520" }}>
               <span>QUOTATION ID : {quotation.serialNumber}</span>
               <span>Date : {new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
             </div>
@@ -306,7 +343,7 @@ export default function QuotationDetailsPage() {
 
             {/* Service Title */}
             <div className="mb-6 print:mt-8" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-              <h2 className="text-xl font-bold uppercase m-0" style={{ color: "#0369a1" }}>
+              <h2 className="text-xl font-bold uppercase m-0" style={{ color: "#DAA520" }}>
                 {currentTemplate?.id || `${formData.serviceType.toUpperCase()} SERVICE`}
               </h2>
             </div>
@@ -317,54 +354,52 @@ export default function QuotationDetailsPage() {
                 <>
                   {currentTemplate.servicePackage && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SERVICE PACKAGE INCLUDES :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SERVICE PACKAGE INCLUDES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.servicePackage}</div>
                     </div>
                   )}
                   {currentTemplate.projectDeliverables && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>PROJECT DELIVERABLES :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT DELIVERABLES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectDeliverables}</div>
                     </div>
                   )}
                   {currentTemplate.importantNote && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>IMPORTANT NOTE :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>IMPORTANT NOTE :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.importantNote}</div>
                     </div>
                   )}
                   {currentTemplate.scheduleTimeFrame && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SCHEDULE TIME FRAME & PROJECT DURATION :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SCHEDULE TIME FRAME & PROJECT DURATION :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.scheduleTimeFrame}</div>
                     </div>
                   )}
                   
-                  {/* MANUAL PAGE BREAK TO FIX VERCEL RENDERING BUG */}
-                  <div className="html2pdf__page-break"></div>
-                  
+
                   {currentTemplate.projectPaymentTerms && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>PROJECT PAYMENT TERMS :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT PAYMENT TERMS :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectPaymentTerms}</div>
                     </div>
                   )}
                   {currentTemplate.sampleOrCaseStudies && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>SAMPLE OR CASE STUDIES :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SAMPLE OR CASE STUDIES :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.sampleOrCaseStudies}</div>
                     </div>
                   )}
                   {currentTemplate.termsAndConditions && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>TERMS & CONDITIONS :</h4>
+                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>TERMS & CONDITIONS :</h4>
                       <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.termsAndConditions}</div>
                     </div>
                   )}
                 </>
               ) : (
                 <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                  <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#0369a1" }}>REQUIREMENTS & SCOPE :</h4>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>REQUIREMENTS & SCOPE :</h4>
                   <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>
                     {formData.requirements || "No specific requirements provided."}
                   </div>
@@ -372,24 +407,27 @@ export default function QuotationDetailsPage() {
               )}
             </>
             
-            {/* Spacer to push footer down */}
+            {/* Spacer to push footer down (if flex was used, but here it's just flow) */}
             <div style={{ flexGrow: 1 }}></div>
 
-            {/* Footer content - Amount and Sign */}
-            <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #e2e8f0", pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold" style={{ color: "#000000" }}>Amount:</span>
-                <span className="text-2xl font-black" style={{ color: "#000000" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
+            {/* Footer Container (keeps Amount and Address together to prevent slicing) */}
+            <div style={{ pageBreakInside: 'avoid', breakInside: 'avoid', marginTop: '3rem' }}>
+              {/* Footer content - Amount and Sign */}
+              <div className="flex justify-between items-end mb-8 pt-8" style={{ borderTop: "1px solid #e2e8f0" }}>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold" style={{ color: "#000000" }}>Amount:</span>
+                  <span className="text-2xl font-black" style={{ color: "#000000" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-sm m-0" style={{ color: "#000000" }}>For Digital Dictionary</p>
+                  <p className="text-xs m-0" style={{ color: "#000000" }}>with date & stamp</p>
+                </div>
               </div>
-              <div className="text-center">
-                <p className="font-bold text-sm m-0" style={{ color: "#000000" }}>For Digital Dictionary</p>
-                <p className="text-xs m-0" style={{ color: "#000000" }}>with date & stamp</p>
-              </div>
-            </div>
 
-            {/* Bottom Bar */}
-            <div className="text-center text-xs mt-auto pt-4" style={{ color: "#3b82f6", borderTop: "1px solid #bfdbfe" }}>
-              📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
+              {/* Bottom Bar */}
+              <div className="text-center text-xs pt-4" style={{ color: "#DAA520", borderTop: "1px solid #fce7f3", borderColor: "#fde68a" }}>
+                📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
+              </div>
             </div>
           </div>
         </div>

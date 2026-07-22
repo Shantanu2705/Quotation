@@ -147,11 +147,15 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
       {/* Hidden A4 Template for PDF Generation */}
       <div ref={printRef} style={{ display: 'none' }}>
         <div 
-          className="p-12"
-          style={{ width: "210mm", minHeight: "297mm", padding: "20mm", backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif" }}
+          className="relative"
+          style={{ width: "794px", minHeight: "1123px", padding: "40px", backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif", border: "15px solid #DAA520", boxSizing: "border-box" }}
         >
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", justifyContent: "center", alignItems: "center", zIndex: 0, opacity: 0.1, pointerEvents: "none" }}>
+            <img src="/watermark.png" alt="watermark" style={{ width: "80%", height: "auto", filter: "grayscale(100%)" }} />
+          </div>
+          <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%" }}>
           {/* Header */}
-          <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #3b82f6" }}>
+          <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #DAA520" }}>
             <div className="flex items-center gap-4">
               <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
             </div>
@@ -163,7 +167,7 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
           </div>
 
           {/* Meta */}
-          <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#0369a1" }}>
+          <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#DAA520" }}>
             <div>
               <p className="mb-1">INVOICE NO : {invoiceNumber}</p>
               <p>QUOTATION ID : {quotation.serialNumber}</p>
@@ -210,8 +214,9 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
           </div>
 
           {/* Bottom Bar */}
-          <div className="text-center text-xs mt-auto pt-4" style={{ color: "#3b82f6", borderTop: "1px solid #bfdbfe" }}>
+          <div className="text-center text-xs mt-auto pt-4" style={{ color: "#DAA520", borderTop: "1px solid #fce7f3", borderColor: "#fde68a" }}>
             📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
+          </div>
           </div>
         </div>
       </div>
