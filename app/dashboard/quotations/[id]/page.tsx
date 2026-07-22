@@ -105,7 +105,7 @@ export default function QuotationDetailsPage() {
         pagebreak: { mode: ['css', 'legacy'] }
       };
       
-      await html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
+      await (html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
         const totalPages = pdf.internal.getNumberOfPages();
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -123,7 +123,7 @@ export default function QuotationDetailsPage() {
             pdf.addImage(wmBase64, 'PNG', (pdfWidth - w) / 2, (pdfHeight - h) / 2, w, h);
           }
         }
-      }).save();
+      }) as any).save();
       
       setIsGeneratingPdf(false);
       toast.success("PDF downloaded successfully!");
