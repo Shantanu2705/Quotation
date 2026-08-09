@@ -350,7 +350,14 @@ export default function QuotationDetailsPage() {
 
             {/* Boilerplate or Requirements */}
             <>
-              {currentTemplate ? (
+              <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>REQUIREMENTS & SCOPE :</h4>
+                <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>
+                  {formData.requirements || "No specific requirements provided."}
+                </div>
+              </div>
+
+              {currentTemplate && (
                 <>
                   {currentTemplate.servicePackage && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
@@ -397,13 +404,6 @@ export default function QuotationDetailsPage() {
                     </div>
                   )}
                 </>
-              ) : (
-                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                  <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>REQUIREMENTS & SCOPE :</h4>
-                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>
-                    {formData.requirements || "No specific requirements provided."}
-                  </div>
-                </div>
               )}
             </>
             
