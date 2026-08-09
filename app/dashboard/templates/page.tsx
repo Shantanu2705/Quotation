@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { RichEditor } from "@/components/ui/rich-editor";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
@@ -100,9 +101,9 @@ export default function TemplatesPage() {
               
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Service Package / Features</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.servicePackage || ""} 
-                  onChange={e => setFormData({ ...formData, servicePackage: e.target.value })}
+                  onChange={val => setFormData({ ...formData, servicePackage: val })}
                   placeholder="Enter the features or package details..."
                   className="min-h-[150px] font-mono text-sm"
                 />
@@ -110,9 +111,9 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Project Deliverables</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.projectDeliverables || ""} 
-                  onChange={e => setFormData({ ...formData, projectDeliverables: e.target.value })}
+                  onChange={val => setFormData({ ...formData, projectDeliverables: val })}
                   placeholder="Enter project deliverables..."
                   className="min-h-[100px] font-mono text-sm"
                 />
@@ -120,9 +121,9 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Important Note</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.importantNote || ""} 
-                  onChange={e => setFormData({ ...formData, importantNote: e.target.value })}
+                  onChange={val => setFormData({ ...formData, importantNote: val })}
                   placeholder="Enter any important notes..."
                   className="min-h-[100px] font-mono text-sm"
                 />
@@ -130,9 +131,9 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Schedule Time Frame & Project Duration</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.scheduleTimeFrame || ""} 
-                  onChange={e => setFormData({ ...formData, scheduleTimeFrame: e.target.value })}
+                  onChange={val => setFormData({ ...formData, scheduleTimeFrame: val })}
                   placeholder="Enter schedule and duration..."
                   className="min-h-[100px] font-mono text-sm"
                 />
@@ -140,9 +141,9 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Project Payment Terms</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.projectPaymentTerms || ""} 
-                  onChange={e => setFormData({ ...formData, projectPaymentTerms: e.target.value })}
+                  onChange={val => setFormData({ ...formData, projectPaymentTerms: val })}
                   placeholder="Enter payment terms..."
                   className="min-h-[100px] font-mono text-sm"
                 />
@@ -150,9 +151,9 @@ export default function TemplatesPage() {
               
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Sample or Case Studies</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.sampleOrCaseStudies || ""} 
-                  onChange={e => setFormData({ ...formData, sampleOrCaseStudies: e.target.value })}
+                  onChange={val => setFormData({ ...formData, sampleOrCaseStudies: val })}
                   placeholder="Enter samples or case studies..."
                   className="min-h-[100px] font-mono text-sm"
                 />
@@ -160,9 +161,9 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Terms & Conditions</Label>
-                <Textarea 
+                <RichEditor 
                   value={formData.termsAndConditions || ""} 
-                  onChange={e => setFormData({ ...formData, termsAndConditions: e.target.value })}
+                  onChange={val => setFormData({ ...formData, termsAndConditions: val })}
                   placeholder="Enter terms and conditions..."
                   className="min-h-[150px] font-mono text-sm"
                 />

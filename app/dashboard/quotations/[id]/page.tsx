@@ -15,6 +15,7 @@ import { useTemplates } from "@/hooks/useTemplates";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RichEditor } from "@/components/ui/rich-editor";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -297,11 +298,13 @@ export default function QuotationDetailsPage() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-muted-foreground">Requirements & Scope</label>
-            <Textarea 
-              name="requirements"
+            <RichEditor 
               value={formData.requirements}
-              onChange={handleChange}
-              className="bg-background min-h-[100px] resize-y"
+              onChange={(val) => {
+                setFormData(prev => ({ ...prev, requirements: val }));
+                setIsDirty(true);
+              }}
+              className="bg-background min-h-[100px]"
             />
           </div>
         </div>
@@ -352,9 +355,11 @@ export default function QuotationDetailsPage() {
             <>
               <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>REQUIREMENTS & SCOPE :</h4>
-                <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>
-                  {formData.requirements || "No specific requirements provided."}
-                </div>
+                <div 
+                  className="text-xs whitespace-pre-wrap" 
+                  style={{ color: "#000000" }} 
+                  dangerouslySetInnerHTML={{ __html: formData.requirements || "No specific requirements provided." }}
+                />
               </div>
 
               {currentTemplate && (
@@ -362,25 +367,25 @@ export default function QuotationDetailsPage() {
                   {currentTemplate.servicePackage && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SERVICE PACKAGE INCLUDES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.servicePackage}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.servicePackage }} />
                     </div>
                   )}
                   {currentTemplate.projectDeliverables && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT DELIVERABLES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectDeliverables}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectDeliverables }} />
                     </div>
                   )}
                   {currentTemplate.importantNote && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>IMPORTANT NOTE :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.importantNote}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.importantNote }} />
                     </div>
                   )}
                   {currentTemplate.scheduleTimeFrame && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SCHEDULE TIME FRAME & PROJECT DURATION :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.scheduleTimeFrame}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.scheduleTimeFrame }} />
                     </div>
                   )}
                   
@@ -388,19 +393,19 @@ export default function QuotationDetailsPage() {
                   {currentTemplate.projectPaymentTerms && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT PAYMENT TERMS :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.projectPaymentTerms}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectPaymentTerms }} />
                     </div>
                   )}
                   {currentTemplate.sampleOrCaseStudies && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SAMPLE OR CASE STUDIES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.sampleOrCaseStudies}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.sampleOrCaseStudies }} />
                     </div>
                   )}
                   {currentTemplate.termsAndConditions && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                       <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>TERMS & CONDITIONS :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }}>{currentTemplate.termsAndConditions}</div>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.termsAndConditions }} />
                     </div>
                   )}
                 </>
