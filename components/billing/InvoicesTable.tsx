@@ -300,7 +300,6 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
             </div>
 
             </div>
-            </div>
           </div>
         </div>
       )}

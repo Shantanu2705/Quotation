@@ -278,7 +278,6 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
           </div>
 
           </div>
-          </div>
         </div>
       </div>
     </>

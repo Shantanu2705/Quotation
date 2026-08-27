@@ -226,7 +226,6 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
           </div>
 
           </div>
-          </div>
         </div>
       </div>
     </>

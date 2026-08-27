@@ -218,7 +218,6 @@ export function BlankInvoiceDialog({ open, onOpenChange }: BlankInvoiceDialogPro
           </div>
 
           </div>
-          </div>
         </div>
       </div>
     </>
