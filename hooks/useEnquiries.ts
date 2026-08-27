@@ -5,7 +5,7 @@ import { collection, query, orderBy, onSnapshot, addDoc, doc, updateDoc, deleteD
 import { db } from '@/firebase/firestore';
 
 export type EnquiryStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'quotation_sent';
-export type ServiceType = 'SEO' | 'Website Development' | 'AI Leads' | 'Software Solutions' | 'Google Ads / Meta Ads' | 'Digital Marketing';
+export type ServiceType = 'SEO' | 'Premium SEO' | 'Website Development' | 'AI Leads' | 'Software Solutions' | 'Google Ads / Meta Ads' | 'Digital Marketing' | 'Premium Digital Marketing';
 
 export interface Enquiry {
   id: string;

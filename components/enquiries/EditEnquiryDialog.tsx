@@ -31,7 +31,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email"),
   mobileNumber: z.string().min(7, "Mobile number is required"),
   requirements: z.string().min(2, "Requirements are required"),
-  serviceType: z.enum(["SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing"]),
+  serviceType: z.enum(["SEO", "Premium SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing", "Premium Digital Marketing"]),
   status: z.enum(["pending", "in_progress", "completed", "cancelled", "quotation_sent"]),
 });
 
@@ -115,11 +115,13 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="SEO">SEO</SelectItem>
+                  <SelectItem value="Premium SEO">Premium SEO</SelectItem>
                   <SelectItem value="Website Development">Website Development</SelectItem>
                   <SelectItem value="AI Leads">AI Leads</SelectItem>
                   <SelectItem value="Software Solutions">Software Solutions</SelectItem>
                   <SelectItem value="Google Ads / Meta Ads">Google Ads / Meta Ads</SelectItem>
                   <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
+                  <SelectItem value="Premium Digital Marketing">Premium Digital Marketing</SelectItem>
                 </SelectContent>
               </Select>
             </div>

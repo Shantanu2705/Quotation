@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Invoice, useInvoices } from "@/hooks/useInvoices";
 import { Quotation } from "@/hooks/useQuotations";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, Download, Trash2 } from "lucide-react";
+import { Download, Trash2, Eye, Loader2, Search, Filter, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState, useRef } from "react";
@@ -121,6 +121,15 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
     );
   }
 
+  const headingStyle = {
+    color: "#C5A059",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px"
+  };
+
   return (
     <>
       <div className="p-4 border-b border-border">
@@ -192,7 +201,7 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
         <div ref={printRef} style={{ display: 'none' }}>
           <div 
           className="relative"
-          style={{ width: "794px", minHeight: "1123px", padding: "40px", backgroundColor: "#ffffff", color: "#000000", fontFamily: "sans-serif", border: "15px solid #DAA520", boxSizing: "border-box" }}
+          style={{ width: "794px", minHeight: "1123px", padding: "40px", backgroundColor: "#ffffff", color: "#1e3a8a", fontFamily: "sans-serif", border: "15px solid #DAA520", boxSizing: "border-box" }}
         >
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", justifyContent: "center", alignItems: "center", zIndex: 0, opacity: 0.1, pointerEvents: "none" }}>
             <img src="/watermark.png" alt="watermark" style={{ width: "80%", height: "auto", filter: "grayscale(100%)" }} />
@@ -203,15 +212,16 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
               <div className="flex items-center gap-4">
                 <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
               </div>
-              <div className="text-right text-sm" style={{ color: "#334155" }}>
-                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e293b", letterSpacing: "1px" }}>📱 +91 6291111428</p>
+              <div className="text-right text-sm" style={{ color: "#1e3a8a" }}>
+                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>📱 +91 6291111428</p>
                 <p className="mb-1">📧 info@digitaldictionary.com</p>
-                <p>🌐 www.digitaldictionary.com</p>
+                <p className="mb-1">🌐 www.digitaldictionary.in</p>
+                <p className="m-0" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
               </div>
             </div>
 
             {/* Meta */}
-            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#DAA520" }}>
+            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#C5A059" }}>
               <div>
                 <p className="mb-1">INVOICE NO : {selectedInvoice.invoiceNumber}</p>
                 <p>QUOTATION ID : {selectedQuotation.serialNumber}</p>
@@ -221,31 +231,33 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
             
             {/* Customer */}
             <div className="mb-12">
-              <h3 className="text-sm mb-1 uppercase tracking-wider" style={{ color: "#1e293b" }}>{selectedInvoice.type === 'GST Invoice' ? 'BILLED TO :' : 'RECEIVED FROM :'}</h3>
+              <h3 className="text-sm mb-3 uppercase tracking-wider" style={headingStyle}>
+                <UserCircle size={18} /> {selectedInvoice.type === 'GST Invoice' ? 'BILLED TO' : 'RECEIVED FROM'}
+              </h3>
               <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{selectedQuotation.customerName}</p>
             </div>
             
             <table className="w-full text-left border-collapse mb-12">
               <thead>
                 <tr>
-                  <th className="py-3 px-4 font-bold w-3/4" style={{ color: "#374151", borderBottom: "2px solid #e5e7eb" }}>Description</th>
-                  <th className="py-3 px-4 font-bold text-right" style={{ color: "#374151", borderBottom: "2px solid #e5e7eb" }}>Amount</th>
+                  <th className="py-3 px-4 font-bold w-3/4" style={{ color: "#1e3a8a", borderBottom: "2px solid #b8860b" }}>Description</th>
+                  <th className="py-3 px-4 font-bold text-right" style={{ color: "#1e3a8a", borderBottom: "2px solid #b8860b" }}>Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {selectedInvoice.type === 'Advance Receipt' && (
                   <tr>
-                    <td className="py-4 px-4" style={{ color: "#1f2937", borderBottom: "1px solid #f3f4f6" }}>Total Quoted Price for {selectedQuotation.serviceType}</td>
-                    <td className="py-4 px-4 text-right font-medium" style={{ color: "#1f2937", borderBottom: "1px solid #f3f4f6" }}>
+                    <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Total Quoted Price for {selectedQuotation.serviceType}</td>
+                    <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
                       ₹{selectedQuotation.price.toLocaleString("en-IN")}
                     </td>
                   </tr>
                 )}
                 <tr>
-                  <td className="py-4 px-4" style={{ color: "#1f2937", borderBottom: "1px solid #f3f4f6" }}>
+                  <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
                     {selectedInvoice.type === 'GST Invoice' ? `Final Payment for ${selectedQuotation.serviceType}` : `Advance Payment (${selectedInvoice.percentage}%)`}
                   </td>
-                  <td className="py-4 px-4 text-right font-medium" style={{ color: "#1f2937", borderBottom: "1px solid #f3f4f6" }}>
+                  <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
                     {selectedInvoice.type === 'Advance Receipt' ? `- ` : ''}₹{selectedInvoice.amount.toLocaleString("en-IN")}
                   </td>
                 </tr>
@@ -276,19 +288,17 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
             
             <div style={{ flexGrow: 1 }}></div>
 
-            <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #e2e8f0" }}>
+            <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #b8860b" }}>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold" style={{ color: "#000000" }}>Total Amount:</span>
-                <span className="text-2xl font-black" style={{ color: "#000000" }}>₹ {selectedInvoice.amount.toLocaleString("en-IN")}/-</span>
+                <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
+                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {selectedInvoice.amount.toLocaleString("en-IN")}/-</span>
               </div>
               <div className="text-center">
-                <p className="font-bold text-sm m-0" style={{ color: "#000000" }}>For Digital Dictionary</p>
-                <p className="text-xs m-0" style={{ color: "#000000" }}>with date & stamp</p>
+                <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>
+                <p className="text-xs m-0" style={{ color: "#1e3a8a" }}>with date & stamp</p>
               </div>
             </div>
 
-            <div className="text-center text-xs mt-auto pt-4" style={{ color: "#DAA520", borderTop: "1px solid #fce7f3", borderColor: "#fde68a" }}>
-              📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
             </div>
             </div>
           </div>

@@ -5,7 +5,19 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuotations, Quotation } from "@/hooks/useQuotations";
 import { useEnquiries, Enquiry } from "@/hooks/useEnquiries";
 import { QuotationActions } from "@/components/quotations/QuotationActions";
-import { Loader2 } from "lucide-react";
+import { 
+  Loader2, 
+  UserCircle, 
+  Settings2,
+  ListChecks,
+  PackageCheck,
+  Target,
+  AlertCircle,
+  Clock,
+  Banknote,
+  LineChart,
+  ShieldAlert
+} from "lucide-react";
 import { format } from "date-fns";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -193,6 +205,15 @@ export default function QuotationDetailsPage() {
 
   const currentTemplate = templates.find(t => t.id === formData.serviceType);
 
+  const headingStyle = {
+    color: "#C5A059",
+    fontWeight: "900",
+    letterSpacing: "1px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px"
+  };
+
   return (
     <div className="space-y-6 pb-12 -mt-6 -mx-6 bg-muted/30 min-h-screen">
       <QuotationActions 
@@ -276,11 +297,13 @@ export default function QuotationDetailsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="SEO">SEO</SelectItem>
+                  <SelectItem value="Premium SEO">Premium SEO</SelectItem>
                   <SelectItem value="Website Development">Website Development</SelectItem>
                   <SelectItem value="AI Leads">AI Leads</SelectItem>
                   <SelectItem value="Software Solutions">Software Solutions</SelectItem>
                   <SelectItem value="Google Ads / Meta Ads">Google Ads / Meta Ads</SelectItem>
                   <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
+                  <SelectItem value="Premium Digital Marketing">Premium Digital Marketing</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -316,49 +339,54 @@ export default function QuotationDetailsPage() {
         {`@page { margin: 0; }`}
       </style>
       <div className="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none print:static print:opacity-100 print:z-auto print:pointer-events-auto overflow-hidden h-0 print:h-auto print:overflow-visible">
-        <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#000000", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "1px", boxSizing: "border-box" }}>
+        <div ref={printRef} className="print:block w-[794px] print:w-full" style={{ backgroundColor: "#ffffff", color: "#1e3a8a", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "1px", boxSizing: "border-box" }}>
           <div style={{ padding: "0 15mm" }}>
             {/* Header */}
             <div className="flex justify-between items-start mb-8 pb-6" style={{ borderBottom: "2px solid #DAA520" }}>
               <div className="flex items-center gap-4">
                 <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
               </div>
-              <div className="text-right text-sm" style={{ color: "#334155" }}>
-                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e293b", letterSpacing: "1px" }}>📱 +91 6291111428</p>
+              <div className="text-right text-sm" style={{ color: "#1e3a8a" }}>
+                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>📱 +91 6291111428</p>
                 <p className="mb-1">📧 info@digitaldictionary.com</p>
-                <p>🌐 www.digitaldictionary.com</p>
+                <p className="mb-1">🌐 www.digitaldictionary.in</p>
+                <p className="m-0" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
               </div>
             </div>
 
             {/* Meta */}
-            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#DAA520" }}>
+            <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#C5A059" }}>
               <span>QUOTATION ID : {quotation.serialNumber}</span>
               <span>Date : {new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
             </div>
 
             {/* Customer */}
             <div className="mb-10 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-              <h3 className="text-sm mb-1 uppercase tracking-wider" style={{ color: "#1e293b" }}>CUSTOMER DETAILS :</h3>
+              <h3 className="text-sm mb-3 uppercase tracking-wider" style={headingStyle}>
+                <UserCircle size={18} /> CUSTOMER DETAILS
+              </h3>
               <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{formData.customerName || "Customer Name"}</p>
-              <p className="m-0 uppercase" style={{ color: "#1e293b" }}>{formData.email || "NO EMAIL PROVIDED"}</p>
-              <p className="m-0" style={{ color: "#1e293b" }}>{formData.mobileNumber || "NO NUMBER PROVIDED"}</p>
+              <p className="m-0 uppercase" style={{ color: "#1e3a8a" }}>{formData.email || "NO EMAIL PROVIDED"}</p>
+              <p className="m-0" style={{ color: "#1e3a8a" }}>{formData.mobileNumber || "NO NUMBER PROVIDED"}</p>
             </div>
 
             {/* Service Title */}
             <div className="mb-6 print:mt-8" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-              <h2 className="text-xl font-bold uppercase m-0" style={{ color: "#DAA520" }}>
-                {currentTemplate?.id || `${formData.serviceType.toUpperCase()} SERVICE`}
+              <h2 className="text-xl font-bold uppercase m-0" style={headingStyle}>
+                <Settings2 size={24} /> {currentTemplate?.id || `${formData.serviceType.toUpperCase()} SERVICE`}
               </h2>
             </div>
 
             {/* Boilerplate or Requirements */}
             <>
               <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>REQUIREMENTS & SCOPE :</h4>
+                <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                  <ListChecks size={16} /> REQUIREMENTS & SCOPE
+                </h4>
                 <div 
                   className="text-xs whitespace-pre-wrap" 
-                  style={{ color: "#000000" }} 
-                  dangerouslySetInnerHTML={{ __html: formData.requirements || "No specific requirements provided." }}
+                  style={{ color: "#1e3a8a" }} 
+                  dangerouslySetInnerHTML={{ __html: (formData.requirements || "No specific requirements provided.").replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }}
                 />
               </div>
 
@@ -366,46 +394,60 @@ export default function QuotationDetailsPage() {
                 <>
                   {currentTemplate.servicePackage && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SERVICE PACKAGE INCLUDES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.servicePackage }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <PackageCheck size={16} /> SERVICE PACKAGE INCLUDES
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.servicePackage.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   {currentTemplate.projectDeliverables && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT DELIVERABLES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectDeliverables }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <Target size={16} /> PROJECT DELIVERABLES
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectDeliverables.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   {currentTemplate.importantNote && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>IMPORTANT NOTE :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.importantNote }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <AlertCircle size={16} /> IMPORTANT NOTE
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.importantNote.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   {currentTemplate.scheduleTimeFrame && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SCHEDULE TIME FRAME & PROJECT DURATION :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.scheduleTimeFrame }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <Clock size={16} /> SCHEDULE TIME FRAME & PROJECT DURATION
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.scheduleTimeFrame.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   
 
                   {currentTemplate.projectPaymentTerms && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>PROJECT PAYMENT TERMS :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectPaymentTerms }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <Banknote size={16} /> PROJECT PAYMENT TERMS
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectPaymentTerms.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   {currentTemplate.sampleOrCaseStudies && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>SAMPLE OR CASE STUDIES :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.sampleOrCaseStudies }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <LineChart size={16} /> SAMPLE OR CASE STUDIES
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.sampleOrCaseStudies.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                   {currentTemplate.termsAndConditions && (
                     <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={{ color: "#DAA520" }}>TERMS & CONDITIONS :</h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#000000" }} dangerouslySetInnerHTML={{ __html: currentTemplate.termsAndConditions }} />
+                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                        <ShieldAlert size={16} /> TERMS & CONDITIONS
+                      </h4>
+                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.termsAndConditions.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
                     </div>
                   )}
                 </>
@@ -418,21 +460,17 @@ export default function QuotationDetailsPage() {
             {/* Footer Container (keeps Amount and Address together to prevent slicing) */}
             <div style={{ pageBreakInside: 'avoid', breakInside: 'avoid', marginTop: '3rem' }}>
               {/* Footer content - Amount and Sign */}
-              <div className="flex justify-between items-end mb-8 pt-8" style={{ borderTop: "1px solid #e2e8f0" }}>
+              <div className="flex justify-between items-end mb-8 pt-8" style={{ borderTop: "1px solid #b8860b" }}>
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold" style={{ color: "#000000" }}>Amount:</span>
-                  <span className="text-2xl font-black" style={{ color: "#000000" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
+                  <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Amount:</span>
+                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
                 </div>
                 <div className="text-center">
-                  <p className="font-bold text-sm m-0" style={{ color: "#000000" }}>For Digital Dictionary</p>
-                  <p className="text-xs m-0" style={{ color: "#000000" }}>with date & stamp</p>
+                  <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>
+                  <p className="text-xs m-0" style={{ color: "#1e3a8a" }}>with date & stamp</p>
                 </div>
               </div>
 
-              {/* Bottom Bar */}
-              <div className="text-center text-xs pt-4" style={{ color: "#DAA520", borderTop: "1px solid #fce7f3", borderColor: "#fde68a" }}>
-                📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, West Bengal, Pin: 734001
-              </div>
             </div>
           </div>
         </div>
