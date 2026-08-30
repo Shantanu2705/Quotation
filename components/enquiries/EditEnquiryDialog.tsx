@@ -32,6 +32,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email").optional().or(z.literal("")),
   mobileNumber: z.string().min(7, "Mobile number is required"),
   requirements: z.string().optional(),
+  address: z.string().optional(),
   serviceType: z.enum(["SEO", "Premium SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing", "Premium Digital Marketing"]),
   status: z.enum(["pending", "in_progress", "completed", "cancelled", "quotation_sent"]),
 });
@@ -49,6 +50,7 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
       email: enquiry.email || "",
       mobileNumber: enquiry.mobileNumber,
       requirements: enquiry.requirements || "",
+      address: enquiry.address || "",
       serviceType: enquiry.serviceType,
       status: enquiry.status,
     },
@@ -112,6 +114,12 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
             <Label htmlFor="requirements">Requirements / Notes</Label>
             <Input id="requirements" {...register("requirements")} />
             {errors.requirements && <p className="text-xs text-destructive">{errors.requirements.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Input id="address" {...register("address")} />
+            {errors.address && <p className="text-xs text-destructive">{errors.address.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">

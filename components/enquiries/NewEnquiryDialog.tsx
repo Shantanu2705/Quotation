@@ -32,6 +32,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email").optional().or(z.literal("")),
   mobileNumber: z.string().min(7, "Mobile number is required"),
   requirements: z.string().optional(),
+  address: z.string().optional(),
   serviceType: z.enum(["SEO", "Premium SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing", "Premium Digital Marketing"]),
   status: z.enum(["pending", "in_progress", "completed", "cancelled", "quotation_sent"]),
 });
@@ -49,6 +50,7 @@ export function NewEnquiryDialog() {
       email: "",
       mobileNumber: "",
       requirements: "",
+      address: "",
       serviceType: "Website Development",
       status: "pending",
     },
@@ -113,6 +115,12 @@ export function NewEnquiryDialog() {
             <Label htmlFor="requirements">Requirements / Notes</Label>
             <Input id="requirements" {...register("requirements")} placeholder="Briefly describe the project..." />
             {errors.requirements && <p className="text-xs text-destructive">{errors.requirements.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Input id="address" {...register("address")} placeholder="123 Street, City..." />
+            {errors.address && <p className="text-xs text-destructive">{errors.address.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">

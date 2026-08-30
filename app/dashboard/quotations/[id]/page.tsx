@@ -46,9 +46,11 @@ export default function QuotationDetailsPage() {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   
   const [formData, setFormData] = useState({
+    companyName: "",
     customerName: "",
     mobileNumber: "",
     email: "",
+    address: "",
     serviceType: "",
     price: "",
     requirements: "",
@@ -78,9 +80,11 @@ export default function QuotationDetailsPage() {
             const currentTemplate = templates.find(t => t.id === foundQuote.serviceType);
             
             setFormData({
+              companyName: foundEnquiry.companyName || "",
               customerName: foundQuote.customerName,
               mobileNumber: foundEnquiry.mobileNumber || "",
               email: foundEnquiry.email || "",
+              address: foundEnquiry.address || "",
               serviceType: foundQuote.serviceType,
               price: foundQuote.price.toString(),
               requirements: foundEnquiry.requirements || "",
@@ -193,8 +197,10 @@ export default function QuotationDetailsPage() {
         }
       });
       await updateEnquiry(quotation.enquiryId, {
+        companyName: formData.companyName,
         mobileNumber: formData.mobileNumber,
         email: formData.email,
+        address: formData.address,
         requirements: formData.requirements
       });
       setIsDirty(false);
@@ -275,9 +281,18 @@ export default function QuotationDetailsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">Customer name</label>
+              <label className="text-sm font-medium text-muted-foreground">Company name</label>
+              <Input 
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                className="bg-background"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Customer name <span className="text-destructive">*</span></label>
               <Input 
                 name="customerName"
                 value={formData.customerName}
@@ -286,7 +301,7 @@ export default function QuotationDetailsPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">Mobile number</label>
+              <label className="text-sm font-medium text-muted-foreground">Mobile number <span className="text-destructive">*</span></label>
               <Input 
                 name="mobileNumber"
                 value={formData.mobileNumber}
@@ -299,6 +314,15 @@ export default function QuotationDetailsPage() {
               <Input 
                 name="email"
                 value={formData.email}
+                onChange={handleChange}
+                className="bg-background"
+              />
+            </div>
+            <div className="space-y-2 lg:col-span-2">
+              <label className="text-sm font-medium text-muted-foreground">Address</label>
+              <Input 
+                name="address"
+                value={formData.address}
                 onChange={handleChange}
                 className="bg-background"
               />
@@ -457,9 +481,13 @@ export default function QuotationDetailsPage() {
               <h3 className="text-sm mb-3 uppercase tracking-wider" style={headingStyle}>
                 <UserCircle size={18} /> CUSTOMER DETAILS
               </h3>
-              <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{formData.customerName || "Customer Name"}</p>
-              <p className="m-0 uppercase" style={{ color: "#1e3a8a" }}>{formData.email || "NO EMAIL PROVIDED"}</p>
+              {formData.companyName && <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{formData.companyName}</p>}
+              <p className={formData.companyName ? "m-0 font-semibold uppercase" : "text-lg font-bold uppercase m-0"} style={formData.companyName ? { color: "#1e3a8a" } : { color: "#d97706" }}>
+                {formData.customerName || "Customer Name"}
+              </p>
+              {formData.email && <p className="m-0 uppercase" style={{ color: "#1e3a8a" }}>{formData.email}</p>}
               <p className="m-0" style={{ color: "#1e3a8a" }}>{formData.mobileNumber || "NO NUMBER PROVIDED"}</p>
+              {formData.address && <p className="m-0 uppercase whitespace-pre-wrap mt-1" style={{ color: "#1e3a8a", fontSize: "11px" }}>{formData.address}</p>}
             </div>
 
             {/* Service Title */}

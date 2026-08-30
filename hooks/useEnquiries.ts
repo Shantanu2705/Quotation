@@ -17,6 +17,7 @@ export interface Enquiry {
   email?: string;
   mobileNumber: string;
   requirements?: string;
+  address?: string;
 }
 
 // Global mock state to persist across client-side navigation
