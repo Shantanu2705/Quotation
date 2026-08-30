@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDocs, where } from 'firebase/firestore';
 import { db } from '@/firebase/firestore';
 import { ServiceType } from './useEnquiries';
+import { ServiceTemplate } from './useTemplates';
 
 export type QuotationStatus = 'Draft' | 'Sent' | 'Confirmed' | 'Cancelled';
 export type PaymentStatus = 'Payment Pending' | 'Advance Payment Confirmed' | 'Payment Confirmed' | 'Cancelled' | 'Refunded';
@@ -18,6 +19,7 @@ export interface Quotation {
   status: QuotationStatus;
   paymentStatus?: PaymentStatus;
   createdAt: any;
+  customTemplate?: Partial<ServiceTemplate>;
 }
 
 // Global mock state to persist across client-side navigation
@@ -66,19 +68,22 @@ export function useQuotations() {
     }
   }, []);
 
-  const addQuotation = async (data: Omit<Quotation, 'id' | 'createdAt'>) => {
+  const addQuotation = async (data: Omit<Quotation, 'id' | 'createdAt'>): Promise<string> => {
     if (isFirebaseEnabled) {
-      await addDoc(collection(db, 'quotations'), {
+      const docRef = await addDoc(collection(db, 'quotations'), {
         ...data,
         createdAt: serverTimestamp()
       });
+      return docRef.id;
     } else {
+      const id = Math.random().toString();
       globalMockData = [{
-        id: Math.random().toString(),
+        id,
         ...data,
         createdAt: new Date()
       } as Quotation, ...globalMockData];
       notifyListeners();
+      return id;
     }
   };
 

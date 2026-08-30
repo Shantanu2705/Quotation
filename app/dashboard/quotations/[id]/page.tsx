@@ -39,7 +39,7 @@ export default function QuotationDetailsPage() {
 
   const { quotations, loading: quotationsLoading, updateQuotation } = useQuotations();
   const { enquiries, loading: enquiriesLoading, updateEnquiry } = useEnquiries();
-  const { templates } = useTemplates();
+  const { templates, loading: templatesLoading } = useTemplates();
   
   const [quotation, setQuotation] = useState<Quotation | null>(null);
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
@@ -51,7 +51,14 @@ export default function QuotationDetailsPage() {
     email: "",
     serviceType: "",
     price: "",
-    requirements: ""
+    requirements: "",
+    servicePackage: "",
+    projectDeliverables: "",
+    importantNote: "",
+    scheduleTimeFrame: "",
+    projectPaymentTerms: "",
+    sampleOrCaseStudies: "",
+    termsAndConditions: ""
   });
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -59,7 +66,7 @@ export default function QuotationDetailsPage() {
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!quotationsLoading && !enquiriesLoading) {
+    if (!quotationsLoading && !enquiriesLoading && !templatesLoading) {
       const foundQuote = quotations.find((q) => q.id === id);
       if (foundQuote) {
         setQuotation(foundQuote);
@@ -68,19 +75,28 @@ export default function QuotationDetailsPage() {
           setEnquiry(foundEnquiry);
           
           if (!isDirty) {
+            const currentTemplate = templates.find(t => t.id === foundQuote.serviceType);
+            
             setFormData({
               customerName: foundQuote.customerName,
               mobileNumber: foundEnquiry.mobileNumber || "",
               email: foundEnquiry.email || "",
               serviceType: foundQuote.serviceType,
               price: foundQuote.price.toString(),
-              requirements: foundEnquiry.requirements || ""
+              requirements: foundEnquiry.requirements || "",
+              servicePackage: foundQuote.customTemplate?.servicePackage ?? currentTemplate?.servicePackage ?? "",
+              projectDeliverables: foundQuote.customTemplate?.projectDeliverables ?? currentTemplate?.projectDeliverables ?? "",
+              importantNote: foundQuote.customTemplate?.importantNote ?? currentTemplate?.importantNote ?? "",
+              scheduleTimeFrame: foundQuote.customTemplate?.scheduleTimeFrame ?? currentTemplate?.scheduleTimeFrame ?? "",
+              projectPaymentTerms: foundQuote.customTemplate?.projectPaymentTerms ?? currentTemplate?.projectPaymentTerms ?? "",
+              sampleOrCaseStudies: foundQuote.customTemplate?.sampleOrCaseStudies ?? currentTemplate?.sampleOrCaseStudies ?? "",
+              termsAndConditions: foundQuote.customTemplate?.termsAndConditions ?? currentTemplate?.termsAndConditions ?? "",
             });
           }
         }
       }
     }
-  }, [id, quotations, enquiries, quotationsLoading, enquiriesLoading, isDirty]);
+  }, [id, quotations, enquiries, templates, quotationsLoading, enquiriesLoading, templatesLoading, isDirty]);
 
   const handleDownloadPdf = async () => {
     if (!printRef.current || !quotation) return;
@@ -165,7 +181,16 @@ export default function QuotationDetailsPage() {
       await updateQuotation(quotation.id, {
         customerName: formData.customerName,
         serviceType: formData.serviceType as any,
-        price: Number(formData.price)
+        price: Number(formData.price),
+        customTemplate: {
+          servicePackage: formData.servicePackage,
+          projectDeliverables: formData.projectDeliverables,
+          importantNote: formData.importantNote,
+          scheduleTimeFrame: formData.scheduleTimeFrame,
+          projectPaymentTerms: formData.projectPaymentTerms,
+          sampleOrCaseStudies: formData.sampleOrCaseStudies,
+          termsAndConditions: formData.termsAndConditions,
+        }
       });
       await updateEnquiry(quotation.enquiryId, {
         mobileNumber: formData.mobileNumber,
@@ -331,6 +356,73 @@ export default function QuotationDetailsPage() {
             />
           </div>
         </div>
+
+        {/* Quotation Template Details Card */}
+        <div className="bg-background rounded-xl p-6 shadow-sm border border-border">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-foreground">Quotation Template Details</h2>
+            <p className="text-sm text-muted-foreground mt-1">Customize the deliverables, terms, and sections for this specific quotation.</p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Service Package Includes</label>
+              <RichEditor 
+                value={formData.servicePackage}
+                onChange={(val) => { setFormData(prev => ({ ...prev, servicePackage: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Project Deliverables</label>
+              <RichEditor 
+                value={formData.projectDeliverables}
+                onChange={(val) => { setFormData(prev => ({ ...prev, projectDeliverables: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Important Note</label>
+              <RichEditor 
+                value={formData.importantNote}
+                onChange={(val) => { setFormData(prev => ({ ...prev, importantNote: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Schedule Time Frame & Project Duration</label>
+              <RichEditor 
+                value={formData.scheduleTimeFrame}
+                onChange={(val) => { setFormData(prev => ({ ...prev, scheduleTimeFrame: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Project Payment Terms</label>
+              <RichEditor 
+                value={formData.projectPaymentTerms}
+                onChange={(val) => { setFormData(prev => ({ ...prev, projectPaymentTerms: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Sample or Case Studies</label>
+              <RichEditor 
+                value={formData.sampleOrCaseStudies}
+                onChange={(val) => { setFormData(prev => ({ ...prev, sampleOrCaseStudies: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Terms & Conditions</label>
+              <RichEditor 
+                value={formData.termsAndConditions}
+                onChange={(val) => { setFormData(prev => ({ ...prev, termsAndConditions: val })); setIsDirty(true); }}
+                className="bg-background min-h-[100px]"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hidden PDF Template (also used for Printing) */}
@@ -390,67 +482,62 @@ export default function QuotationDetailsPage() {
                 />
               </div>
 
-              {currentTemplate && (
-                <>
-                  {currentTemplate.servicePackage && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <PackageCheck size={16} /> SERVICE PACKAGE INCLUDES
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.servicePackage.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  {currentTemplate.projectDeliverables && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <Target size={16} /> PROJECT DELIVERABLES
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectDeliverables.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  {currentTemplate.importantNote && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <AlertCircle size={16} /> IMPORTANT NOTE
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.importantNote.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  {currentTemplate.scheduleTimeFrame && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <Clock size={16} /> SCHEDULE TIME FRAME & PROJECT DURATION
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.scheduleTimeFrame.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  
-
-                  {currentTemplate.projectPaymentTerms && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <Banknote size={16} /> PROJECT PAYMENT TERMS
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.projectPaymentTerms.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  {currentTemplate.sampleOrCaseStudies && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <LineChart size={16} /> SAMPLE OR CASE STUDIES
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.sampleOrCaseStudies.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                  {currentTemplate.termsAndConditions && (
-                    <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
-                      <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
-                        <ShieldAlert size={16} /> TERMS & CONDITIONS
-                      </h4>
-                      <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: currentTemplate.termsAndConditions.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
-                    </div>
-                  )}
-                </>
+              {formData.servicePackage && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <PackageCheck size={16} /> SERVICE PACKAGE INCLUDES
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.servicePackage.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              {formData.projectDeliverables && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <Target size={16} /> PROJECT DELIVERABLES
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.projectDeliverables.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              {formData.importantNote && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <AlertCircle size={16} /> IMPORTANT NOTE
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.importantNote.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              {formData.scheduleTimeFrame && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <Clock size={16} /> SCHEDULE TIME FRAME & PROJECT DURATION
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.scheduleTimeFrame.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              
+              {formData.projectPaymentTerms && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <Banknote size={16} /> PROJECT PAYMENT TERMS
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.projectPaymentTerms.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              {formData.sampleOrCaseStudies && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <LineChart size={16} /> SAMPLE OR CASE STUDIES
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.sampleOrCaseStudies.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
+              )}
+              {formData.termsAndConditions && (
+                <div className="mb-6 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                  <h4 className="text-sm font-bold uppercase mb-3" style={headingStyle}>
+                    <ShieldAlert size={16} /> TERMS & CONDITIONS
+                  </h4>
+                  <div className="text-xs whitespace-pre-wrap" style={{ color: "#1e3a8a" }} dangerouslySetInnerHTML={{ __html: formData.termsAndConditions.replace(/color:\s*(#000000|black|rgb\(0,\s*0,\s*0\))/gi, "color: #17365D") }} />
+                </div>
               )}
             </>
             
