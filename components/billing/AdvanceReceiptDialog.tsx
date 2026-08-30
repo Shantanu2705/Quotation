@@ -36,7 +36,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
   if (!quotation) return null;
 
   const numPercentage = Number(percentage) || 0;
-  const calculatedAmount = Math.round(quotation.price * (numPercentage / 100));
+  const calculatedAmount = Number((quotation.price * (numPercentage / 100)).toFixed(2));
 
   const handleGenerate = async () => {
     if (numPercentage <= 0 || numPercentage > 100) {

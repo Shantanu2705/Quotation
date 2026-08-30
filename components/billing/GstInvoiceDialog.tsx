@@ -19,7 +19,7 @@ interface GstInvoiceDialogProps {
 export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
-  const { addInvoice } = useInvoices();
+  const { addInvoice, invoices } = useInvoices();
   const { updateQuotation } = useQuotations();
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +30,9 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
   }, [open]);
 
   if (!quotation) return null;
+
+  const advanceInvoices = invoices.filter(i => i.quotationId === quotation.id && i.type === 'Advance Receipt');
+  const totalAdvancePaid = advanceInvoices.reduce((sum, inv) => sum + inv.amount, 0);
 
   const handleGenerate = async () => {
     if (!printRef.current) return;
@@ -211,9 +214,17 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
               <tr>
                 <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Final Payment for {quotation.serviceType}</td>
                 <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                  ₹{quotation.price.toLocaleString("en-IN")}
+                  ₹{quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
               </tr>
+              {totalAdvancePaid > 0 && (
+                <tr>
+                  <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Advance Payment Received</td>
+                  <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
+                    - ₹{totalAdvancePaid.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
           
@@ -222,9 +233,17 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
 
           {/* Footer content - Amount and Sign */}
           <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #b8860b" }}>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
-              <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {quotation.price.toLocaleString("en-IN")}/-</span>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
+                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+              </div>
+              {totalAdvancePaid > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Balance Due:</span>
+                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(quotation.price - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                </div>
+              )}
             </div>
             <div className="text-center">
               <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>

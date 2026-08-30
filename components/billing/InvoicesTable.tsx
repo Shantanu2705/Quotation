@@ -256,7 +256,7 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
                   <tr>
                     <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Total Quoted Price for {selectedQuotation.serviceType}</td>
                     <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                      ₹{selectedQuotation.price.toLocaleString("en-IN")}
+                      ₹{selectedQuotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                   </tr>
                 )}
@@ -265,9 +265,24 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
                     {selectedInvoice.type === 'GST Invoice' ? `Final Payment for ${selectedQuotation.serviceType}` : `Advance Payment (${selectedInvoice.percentage}%)`}
                   </td>
                   <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                    {selectedInvoice.type === 'Advance Receipt' ? `- ` : ''}₹{selectedInvoice.amount.toLocaleString("en-IN")}
+                    {selectedInvoice.type === 'Advance Receipt' ? `- ` : ''}₹{selectedInvoice.amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
+                {selectedInvoice.type === 'GST Invoice' && (() => {
+                  const advanceInvoices = invoices.filter(i => i.quotationId === selectedQuotation.id && i.type === 'Advance Receipt');
+                  const totalAdvancePaid = advanceInvoices.reduce((sum, inv) => sum + inv.amount, 0);
+                  if (totalAdvancePaid > 0) {
+                    return (
+                      <tr>
+                        <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Advance Payment Received</td>
+                        <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
+                          - ₹{totalAdvancePaid.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </td>
+                      </tr>
+                    );
+                  }
+                  return null;
+                })()}
               </tbody>
             </table>
             
@@ -277,7 +292,7 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-bold" style={{ color: "#991b1b" }}>Balance Left to Pay</span>
                     <span className="text-lg font-black" style={{ color: "#7f1d1d" }}>
-                      ₹{(selectedQuotation.price - selectedInvoice.amount).toLocaleString("en-IN")}
+                      ₹{(selectedQuotation.price - selectedInvoice.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -286,7 +301,7 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-lg font-bold" style={{ color: "#065f46" }}>Total Received</span>
                     <span className="text-2xl font-black" style={{ color: "#064e3b" }}>
-                      ₹{selectedInvoice.amount.toLocaleString("en-IN")}
+                      ₹{selectedInvoice.amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -296,9 +311,24 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
             <div style={{ flexGrow: 1 }}></div>
 
             <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #b8860b" }}>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
-                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {selectedInvoice.amount.toLocaleString("en-IN")}/-</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
+                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(selectedInvoice.type === 'GST Invoice' ? selectedQuotation.price : selectedInvoice.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                </div>
+                {selectedInvoice.type === 'GST Invoice' && (() => {
+                  const advanceInvoices = invoices.filter(i => i.quotationId === selectedQuotation.id && i.type === 'Advance Receipt');
+                  const totalAdvancePaid = advanceInvoices.reduce((sum, inv) => sum + inv.amount, 0);
+                  if (totalAdvancePaid > 0) {
+                    return (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Balance Due:</span>
+                        <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(selectedQuotation.price - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
               <div className="text-center">
                 <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>
