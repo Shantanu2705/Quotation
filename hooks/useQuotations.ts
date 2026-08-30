@@ -19,6 +19,7 @@ export interface Quotation {
   status: QuotationStatus;
   paymentStatus?: PaymentStatus;
   createdAt: any;
+  quotationDate?: string;
   customTemplate?: Partial<ServiceTemplate>;
 }
 

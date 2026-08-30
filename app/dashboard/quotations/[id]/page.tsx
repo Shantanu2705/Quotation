@@ -51,6 +51,7 @@ export default function QuotationDetailsPage() {
     mobileNumber: "",
     email: "",
     address: "",
+    quotationDate: "",
     serviceType: "",
     price: "",
     requirements: "",
@@ -79,12 +80,17 @@ export default function QuotationDetailsPage() {
           if (!isDirty) {
             const currentTemplate = templates.find(t => t.id === foundQuote.serviceType);
             
+            const createdDateStr = foundQuote.createdAt?.seconds 
+               ? new Date(foundQuote.createdAt.seconds * 1000).toISOString().split('T')[0]
+               : new Date().toISOString().split('T')[0];
+
             setFormData({
               companyName: foundEnquiry.companyName || "",
               customerName: foundQuote.customerName,
               mobileNumber: foundEnquiry.mobileNumber || "",
               email: foundEnquiry.email || "",
               address: foundEnquiry.address || "",
+              quotationDate: foundQuote.quotationDate || createdDateStr,
               serviceType: foundQuote.serviceType,
               price: foundQuote.price.toString(),
               requirements: foundEnquiry.requirements || "",
@@ -186,6 +192,7 @@ export default function QuotationDetailsPage() {
         customerName: formData.customerName,
         serviceType: formData.serviceType as any,
         price: Number(formData.price),
+        quotationDate: formData.quotationDate,
         customTemplate: {
           servicePackage: formData.servicePackage,
           projectDeliverables: formData.projectDeliverables,
@@ -318,11 +325,21 @@ export default function QuotationDetailsPage() {
                 className="bg-background"
               />
             </div>
-            <div className="space-y-2 lg:col-span-2">
+            <div className="space-y-2">
               <label className="text-sm font-medium text-muted-foreground">Address</label>
               <Input 
                 name="address"
                 value={formData.address}
+                onChange={handleChange}
+                className="bg-background"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Quotation Date</label>
+              <Input 
+                name="quotationDate"
+                type="date"
+                value={formData.quotationDate}
                 onChange={handleChange}
                 className="bg-background"
               />
@@ -462,18 +479,25 @@ export default function QuotationDetailsPage() {
               <div className="flex items-center gap-4">
                 <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
               </div>
-              <div className="text-right text-sm" style={{ color: "#1e3a8a" }}>
-                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>📱 +91 6291111428</p>
-                <p className="mb-1">📧 info@digitaldictionary.com</p>
-                <p className="mb-1">🌐 www.digitaldictionary.in</p>
-                <p className="m-0" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
+              <div className="text-right text-sm flex flex-col items-end" style={{ color: "#1e3a8a" }}>
+                <div className="flex flex-col items-end mb-2">
+                  <p className="font-black m-0 leading-tight" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>
+                    📱 +91 6291111428
+                  </p>
+                  <p className="font-bold m-0 mt-1" style={{ fontSize: "15px", color: "#1e3a8a", letterSpacing: "0.5px" }}>
+                    ☎️ +91 6297868104 (Office)
+                  </p>
+                </div>
+                <p className="mb-1 font-medium">📧 admin07digitaldictionary@gmail.com</p>
+                <p className="mb-1 font-medium">🌐 www.digitaldictionary.in</p>
+                <p className="m-0 font-medium" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
               </div>
             </div>
 
             {/* Meta */}
             <div className="flex justify-between items-center mb-8 font-bold text-sm" style={{ color: "#C5A059" }}>
               <span>QUOTATION ID : {quotation.serialNumber}</span>
-              <span>Date : {new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
+              <span>Date : {formData.quotationDate ? new Date(formData.quotationDate).toLocaleDateString('en-GB').replace(/\//g, '-') : new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
             </div>
 
             {/* Customer */}
