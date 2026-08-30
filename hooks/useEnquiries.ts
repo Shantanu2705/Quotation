@@ -14,9 +14,9 @@ export interface Enquiry {
   serviceType: ServiceType;
   status: EnquiryStatus;
   createdAt: any;
-  email: string;
+  email?: string;
   mobileNumber: string;
-  requirements: string;
+  requirements?: string;
 }
 
 // Global mock state to persist across client-side navigation

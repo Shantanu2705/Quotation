@@ -27,10 +27,11 @@ import {
 import { Loader2, Pencil } from "lucide-react";
 
 const formSchema = z.object({
+  companyName: z.string().optional(),
   customerName: z.string().min(2, "Name is required"),
-  email: z.string().email("Invalid email"),
+  email: z.string().email("Invalid email").optional().or(z.literal("")),
   mobileNumber: z.string().min(7, "Mobile number is required"),
-  requirements: z.string().min(2, "Requirements are required"),
+  requirements: z.string().optional(),
   serviceType: z.enum(["SEO", "Premium SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing", "Premium Digital Marketing"]),
   status: z.enum(["pending", "in_progress", "completed", "cancelled", "quotation_sent"]),
 });
@@ -43,10 +44,11 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      companyName: enquiry.companyName || "",
       customerName: enquiry.customerName,
-      email: enquiry.email,
+      email: enquiry.email || "",
       mobileNumber: enquiry.mobileNumber,
-      requirements: enquiry.requirements,
+      requirements: enquiry.requirements || "",
       serviceType: enquiry.serviceType,
       status: enquiry.status,
     },
@@ -81,7 +83,13 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="customerName">Customer Name</Label>
+            <Label htmlFor="companyName">Company Name</Label>
+            <Input id="companyName" {...register("companyName")} />
+            {errors.companyName && <p className="text-xs text-destructive">{errors.companyName.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="customerName">Customer Name <span className="text-destructive">*</span></Label>
             <Input id="customerName" {...register("customerName")} />
             {errors.customerName && <p className="text-xs text-destructive">{errors.customerName.message}</p>}
           </div>
@@ -94,7 +102,7 @@ export function EditEnquiryDialog({ enquiry }: { enquiry: Enquiry }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Label htmlFor="mobileNumber">Mobile Number <span className="text-destructive">*</span></Label>
               <Input id="mobileNumber" {...register("mobileNumber")} />
               {errors.mobileNumber && <p className="text-xs text-destructive">{errors.mobileNumber.message}</p>}
             </div>
