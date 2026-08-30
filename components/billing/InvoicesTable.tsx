@@ -212,11 +212,18 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
               <div className="flex items-center gap-4">
                 <img src="/logo.png?v=3" alt="Digital Dictionary Logo" style={{ maxHeight: "120px", objectFit: "contain" }} />
               </div>
-              <div className="text-right text-sm" style={{ color: "#1e3a8a" }}>
-                <p className="font-black mb-1" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>📱 +91 6291111428</p>
-                <p className="mb-1">📧 info@digitaldictionary.com</p>
-                <p className="mb-1">🌐 www.digitaldictionary.in</p>
-                <p className="m-0" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
+              <div className="text-right text-sm flex flex-col items-end" style={{ color: "#1e3a8a" }}>
+                <div className="flex flex-col items-end mb-2">
+                  <p className="font-black m-0 leading-tight" style={{ fontSize: "24px", color: "#1e3a8a", letterSpacing: "1px" }}>
+                    📱 +91 6291111428
+                  </p>
+                  <p className="font-bold m-0 mt-1" style={{ fontSize: "15px", color: "#1e3a8a", letterSpacing: "0.5px" }}>
+                    ☎️ +91 6297868104 (Office)
+                  </p>
+                </div>
+                <p className="mb-1 font-medium">📧 admin07digitaldictionary@gmail.com</p>
+                <p className="mb-1 font-medium">🌐 www.digitaldictionary.in</p>
+                <p className="m-0 font-medium" style={{ color: "#1e3a8a" }}>📍 Neelkamal Shopping Plaza, D.L.Roy Sarani, Ward 6, Siliguri, WB 734001</p>
               </div>
             </div>
 
