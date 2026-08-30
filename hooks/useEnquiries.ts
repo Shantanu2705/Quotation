@@ -10,6 +10,7 @@ export type ServiceType = 'SEO' | 'Premium SEO' | 'Website Development' | 'AI Le
 export interface Enquiry {
   id: string;
   customerName: string;
+  companyName?: string;
   serviceType: ServiceType;
   status: EnquiryStatus;
   createdAt: any;
@@ -20,9 +21,9 @@ export interface Enquiry {
 
 // Global mock state to persist across client-side navigation
 let globalMockData: Enquiry[] = [
-  { id: "1", customerName: "Acme Corp", serviceType: "Website Development", status: "in_progress", email: "contact@acme.com", mobileNumber: "+1 234 567 8900", requirements: "Need a new e-commerce platform.", createdAt: new Date() },
-  { id: "2", customerName: "Jane Smith", serviceType: "SEO", status: "pending", email: "jane@smith.com", mobileNumber: "+1 987 654 3210", requirements: "Improve local search rankings.", createdAt: new Date() },
-  { id: "3", customerName: "TechNova Inc", serviceType: "Software Solutions", status: "pending", email: "info@technova.com", mobileNumber: "+1 555 123 4567", requirements: "Custom CRM development.", createdAt: new Date() }
+  { id: "1", customerName: "Acme Corp", companyName: "Acme Corp", serviceType: "Website Development", status: "in_progress", email: "contact@acme.com", mobileNumber: "+1 234 567 8900", requirements: "Need a new e-commerce platform.", createdAt: new Date() },
+  { id: "2", customerName: "Jane Smith", companyName: "Smith LLC", serviceType: "SEO", status: "pending", email: "jane@smith.com", mobileNumber: "+1 987 654 3210", requirements: "Improve local search rankings.", createdAt: new Date() },
+  { id: "3", customerName: "TechNova Inc", companyName: "TechNova Inc", serviceType: "Software Solutions", status: "pending", email: "info@technova.com", mobileNumber: "+1 555 123 4567", requirements: "Custom CRM development.", createdAt: new Date() }
 ];
 
 // Simple listener system for mock data

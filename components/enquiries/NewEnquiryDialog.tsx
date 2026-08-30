@@ -27,10 +27,11 @@ import {
 import { Loader2, Plus } from "lucide-react";
 
 const formSchema = z.object({
+  companyName: z.string().optional(),
   customerName: z.string().min(2, "Name is required"),
-  email: z.string().email("Invalid email"),
+  email: z.string().email("Invalid email").optional().or(z.literal("")),
   mobileNumber: z.string().min(7, "Mobile number is required"),
-  requirements: z.string().min(2, "Requirements are required"),
+  requirements: z.string().optional(),
   serviceType: z.enum(["SEO", "Premium SEO", "Website Development", "AI Leads", "Software Solutions", "Google Ads / Meta Ads", "Digital Marketing", "Premium Digital Marketing"]),
   status: z.enum(["pending", "in_progress", "completed", "cancelled", "quotation_sent"]),
 });
@@ -43,6 +44,7 @@ export function NewEnquiryDialog() {
   const { register, handleSubmit, setValue, watch, formState: { errors }, reset } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      companyName: "",
       customerName: "",
       email: "",
       mobileNumber: "",
@@ -82,7 +84,13 @@ export function NewEnquiryDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="customerName">Customer Name</Label>
+            <Label htmlFor="companyName">Company Name</Label>
+            <Input id="companyName" {...register("companyName")} placeholder="Acme Corp" />
+            {errors.companyName && <p className="text-xs text-destructive">{errors.companyName.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="customerName">Customer Name <span className="text-destructive">*</span></Label>
             <Input id="customerName" {...register("customerName")} placeholder="John Doe" />
             {errors.customerName && <p className="text-xs text-destructive">{errors.customerName.message}</p>}
           </div>
@@ -95,7 +103,7 @@ export function NewEnquiryDialog() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Label htmlFor="mobileNumber">Mobile Number <span className="text-destructive">*</span></Label>
               <Input id="mobileNumber" {...register("mobileNumber")} placeholder="+1 555-0000" />
               {errors.mobileNumber && <p className="text-xs text-destructive">{errors.mobileNumber.message}</p>}
             </div>
