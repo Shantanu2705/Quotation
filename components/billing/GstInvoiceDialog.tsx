@@ -233,21 +233,29 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
 
           {/* Footer content - Amount and Sign */}
           <div className="flex justify-between items-end mt-12 mb-8 pt-8" style={{ borderTop: "1px solid #b8860b" }}>
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
-                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
-              </div>
-              {totalAdvancePaid > 0 && (
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Balance Due:</span>
-                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(quotation.price - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                  <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
+                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
                 </div>
-              )}
+                {totalAdvancePaid > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Balance Due:</span>
+                    <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(quotation.price - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-sm p-3 rounded-md bg-slate-50 border border-slate-200" style={{ color: "#1e3a8a" }}>
+                <p className="font-bold mb-1 text-[#d97706]">Bank Details:</p>
+                <p className="m-0 font-bold">Digital Dictionary</p>
+                <p className="m-0">Axis Bank Bagdogra Branch</p>
+                <p className="m-0">Account No: <span className="font-bold">926020029844176</span></p>
+                <p className="m-0">IFSC Code: <span className="font-bold">UTIB0005857</span></p>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>
-              <p className="text-xs m-0" style={{ color: "#1e3a8a" }}>with date & stamp</p>
+            <div className="text-center flex flex-col items-center">
+              <img src="/stamp.png" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto", objectFit: "contain", mixBlendMode: "multiply" }} className="mb-2" />
             </div>
           </div>
 
