@@ -246,8 +246,8 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
                   </div>
                 )}
               </div>
-              <div className="text-sm p-3 rounded-md bg-slate-50 border border-slate-200" style={{ color: "#1e3a8a" }}>
-                <p className="font-bold mb-1 text-[#d97706]">Bank Details:</p>
+              <div className="text-sm p-3" style={{ color: "#1e3a8a", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                <p className="font-bold mb-1" style={{ color: "#d97706" }}>Bank Details:</p>
                 <p className="m-0 font-bold">Digital Dictionary</p>
                 <p className="m-0">Axis Bank Bagdogra Branch</p>
                 <p className="m-0">Account No: <span className="font-bold">926020029844176</span></p>
@@ -255,7 +255,7 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
               </div>
             </div>
             <div className="text-center flex flex-col items-center">
-              <img src="/stamp.png" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto", objectFit: "contain" }} className="mb-2" />
+              <img src="/stamp.png" crossOrigin="anonymous" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto" }} className="mb-2" />
             </div>
           </div>
 
