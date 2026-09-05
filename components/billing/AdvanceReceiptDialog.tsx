@@ -288,7 +288,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               </div>
             </div>
             <div className="text-center flex flex-col items-center">
-              <img src="/stamp.png" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto", objectFit: "contain", mixBlendMode: "multiply" }} className="mb-2" />
+              <img src="/stamp.png" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto", objectFit: "contain" }} className="mb-2" />
             </div>
           </div>
 
