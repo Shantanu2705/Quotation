@@ -330,9 +330,9 @@ export function InvoicesTable({ invoices, quotations, loading, type }: InvoicesT
                   return null;
                 })()}
               </div>
-              <div className="text-center">
-                <p className="font-bold text-sm m-0" style={{ color: "#1e3a8a" }}>For Digital Dictionary</p>
-                <p className="text-xs m-0" style={{ color: "#1e3a8a" }}>with date & stamp</p>
+              <div className="text-center flex flex-col items-center">
+                <img src="/stamp.png" crossOrigin="anonymous" alt="Digital Dictionary Stamp" style={{ width: "160px", height: "auto", transform: "rotate(2deg)" }} className="mb-2" />
+                <p className="text-sm font-bold mt-1" style={{ color: "#1e3a8a", borderTop: "1px solid #1e3a8a", paddingTop: "4px" }}>Authorized Stamp and Signature</p>
               </div>
             </div>
 
