@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Quotation, useQuotations } from "@/hooks/useQuotations";
 import { useInvoices } from "@/hooks/useInvoices";
+import { useEnquiries } from "@/hooks/useEnquiries";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,9 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
+  const [gstNumber, setGstNumber] = useState<string>("");
   const { addInvoice, invoices } = useInvoices();
+  const { enquiries } = useEnquiries();
   const { updateQuotation } = useQuotations();
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +41,8 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
   const totalAdvancePaid = advanceInvoices.reduce((sum, inv) => sum + inv.amount, 0);
 
   const numAmount = Number(amount) || 0;
+  
+  const enquiry = enquiries.find((e) => e.id === quotation.enquiryId);
 
   const handleGenerate = async () => {
     if (!printRef.current) return;
@@ -151,6 +156,15 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
             </div>
             
             <div className="space-y-2">
+              <label className="text-sm font-medium">GST Number (Optional)</label>
+              <Input
+                value={gstNumber}
+                onChange={(e) => setGstNumber(e.target.value)}
+                placeholder="Enter GSTIN if any"
+              />
+            </div>
+            
+            <div className="space-y-2">
               <label className="text-sm font-medium">Total Invoice Amount (₹)</label>
               <Input
                 type="number"
@@ -224,11 +238,18 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
           </div>
           
           {/* Customer */}
-          <div className="mb-12">
+          <div className="mb-12 print:pt-4" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
             <h3 className="text-sm mb-3 uppercase tracking-wider" style={headingStyle}>
               <UserCircle size={18} /> BILLED TO
             </h3>
-            <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{quotation.customerName}</p>
+            {enquiry?.companyName && <p className="text-lg font-bold uppercase m-0" style={{ color: "#d97706" }}>{enquiry.companyName}</p>}
+            <p className={enquiry?.companyName ? "m-0 font-semibold uppercase" : "text-lg font-bold uppercase m-0"} style={enquiry?.companyName ? { color: "#1e3a8a" } : { color: "#d97706" }}>
+              {quotation.customerName}
+            </p>
+            {enquiry?.email && <p className="m-0 uppercase" style={{ color: "#1e3a8a" }}>{enquiry.email}</p>}
+            {enquiry?.mobileNumber && <p className="m-0" style={{ color: "#1e3a8a" }}>{enquiry.mobileNumber}</p>}
+            {enquiry?.address && <p className="m-0 uppercase whitespace-pre-wrap mt-1" style={{ color: "#1e3a8a", fontSize: "11px" }}>{enquiry.address}</p>}
+            {gstNumber && <p className="m-0 mt-2 font-bold uppercase" style={{ color: "#1e3a8a" }}>GSTIN: {gstNumber}</p>}
           </div>
           
           <table className="w-full text-left border-collapse mb-12">
