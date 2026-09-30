@@ -19,23 +19,37 @@ interface GstInvoiceDialogProps {
 export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
   const { addInvoice, invoices } = useInvoices();
   const { updateQuotation } = useQuotations();
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) {
+    if (open && quotation) {
       setInvoiceNumber(`GST-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
+      setAmount(quotation.price.toString());
     }
-  }, [open]);
+  }, [open, quotation]);
 
   if (!quotation) return null;
 
   const advanceInvoices = invoices.filter(i => i.quotationId === quotation.id && i.type === 'Advance Receipt');
   const totalAdvancePaid = advanceInvoices.reduce((sum, inv) => sum + inv.amount, 0);
 
+  const numAmount = Number(amount) || 0;
+
   const handleGenerate = async () => {
     if (!printRef.current) return;
+    
+    if (numAmount <= 0) {
+      toast.error("Please enter a valid amount.");
+      return;
+    }
+    
+    if (!invoiceNumber.trim()) {
+      toast.error("Please enter an invoice number.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -44,7 +58,7 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
         quotationId: quotation.id,
         invoiceNumber,
         type: 'GST Invoice',
-        amount: quotation.price, // Full amount for GST invoice usually
+        amount: numAmount, // Full amount for GST invoice usually
         percentage: 100,
         status: 'Pending',
         customerName: quotation.customerName
@@ -126,10 +140,23 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-6 flex flex-col items-center justify-center space-y-4">
-            <div className="text-center space-y-1">
-              <p className="text-sm text-muted-foreground">Total Invoice Amount</p>
-              <p className="text-3xl font-bold">₹{quotation.price.toLocaleString("en-IN")}</p>
+          <div className="py-6 flex flex-col space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Invoice Number</label>
+              <Input
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Total Invoice Amount (₹)</label>
+              <Input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="font-bold text-lg"
+              />
             </div>
             
             <div className="w-full bg-muted/50 p-4 rounded-lg text-sm space-y-2 mt-4">
@@ -214,7 +241,7 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
               <tr>
                 <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Final Payment for {quotation.serviceType}</td>
                 <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                  ₹{quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ₹{numAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
               </tr>
               {totalAdvancePaid > 0 && (
@@ -237,21 +264,14 @@ export function GstInvoiceDialog({ quotation, open, onOpenChange }: GstInvoiceDi
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
-                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {quotation.price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                  <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {numAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
                 </div>
                 {totalAdvancePaid > 0 && (
                   <div className="flex items-center gap-2">
                     <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Balance Due:</span>
-                    <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(quotation.price - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
+                    <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {(numAmount - totalAdvancePaid).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/-</span>
                   </div>
                 )}
-              </div>
-              <div className="text-sm p-3" style={{ color: "#1e3a8a", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}>
-                <p className="font-bold mb-1" style={{ color: "#d97706" }}>Bank Details:</p>
-                <p className="m-0 font-bold">Digital Dictionary</p>
-                <p className="m-0">Axis Bank Bagdogra Branch</p>
-                <p className="m-0">Account No: <span className="font-bold">926020029844176</span></p>
-                <p className="m-0">IFSC Code: <span className="font-bold">UTIB0005857</span></p>
               </div>
             </div>
             <div className="text-center flex flex-col items-center">

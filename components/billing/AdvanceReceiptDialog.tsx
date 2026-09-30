@@ -18,29 +18,34 @@ interface AdvanceReceiptDialogProps {
 }
 
 export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceReceiptDialogProps) {
-  const [percentage, setPercentage] = useState<string>("50");
+  const [amount, setAmount] = useState<string>("");
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addInvoice } = useInvoices();
   const { updateQuotation } = useQuotations();
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Reset percentage and generate invoice number when dialog opens
+  // Reset amount and generate invoice number when dialog opens
   useEffect(() => {
-    if (open) {
-      setPercentage("50");
+    if (open && quotation) {
+      setAmount((quotation.price * 0.5).toString());
       setInvoiceNumber(`AR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
     }
-  }, [open]);
+  }, [open, quotation]);
 
   if (!quotation) return null;
 
-  const numPercentage = Number(percentage) || 0;
-  const calculatedAmount = Number((quotation.price * (numPercentage / 100)).toFixed(2));
+  const numAmount = Number(amount) || 0;
+  const numPercentage = quotation && quotation.price > 0 ? Number(((numAmount / quotation.price) * 100).toFixed(2)) : 0;
 
   const handleGenerate = async () => {
-    if (numPercentage <= 0 || numPercentage > 100) {
-      toast.error("Please enter a valid percentage between 1 and 100.");
+    if (numAmount <= 0) {
+      toast.error("Please enter a valid amount.");
+      return;
+    }
+    
+    if (!invoiceNumber.trim()) {
+      toast.error("Please enter an invoice number.");
       return;
     }
 
@@ -55,7 +60,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
         quotationId: quotation.id,
         invoiceNumber,
         type: 'Advance Receipt',
-        amount: calculatedAmount,
+        amount: numAmount,
         percentage: numPercentage,
         status: 'Paid',
         customerName: quotation.customerName
@@ -143,27 +148,34 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
             <span className="font-bold text-lg">₹{quotation.price.toLocaleString("en-IN")}</span>
           </div>
 
-          <div className="space-y-3">
-            <label className="text-sm font-medium">Advance Payment Percentage (%)</label>
-            <div className="flex gap-4 items-center">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Invoice Number</label>
               <Input
-                type="number"
-                value={percentage}
-                onChange={(e) => setPercentage(e.target.value)}
-                min={1}
-                max={100}
-                className="w-24 text-center font-medium"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
               />
-              <span className="text-muted-foreground">=</span>
-              <div className="flex-1 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-bold text-right">
-                ₹{calculatedAmount.toLocaleString("en-IN")}
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Advance Payment Amount (₹)</label>
+              <div className="flex gap-4 items-center">
+                <Input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="font-medium"
+                />
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                  ({numPercentage}%)
+                </span>
               </div>
             </div>
           </div>
           
           <div className="flex justify-between items-center bg-red-50 p-4 rounded-lg border border-red-100">
             <span className="text-sm font-bold text-red-800">Balance Left to Pay</span>
-            <span className="font-black text-xl text-red-900">₹{(quotation.price - calculatedAmount).toLocaleString("en-IN")}</span>
+            <span className="font-black text-xl text-red-900">₹{(quotation.price - numAmount).toLocaleString("en-IN")}</span>
           </div>
         </div>
 
@@ -243,7 +255,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               <tr>
                 <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Advance Payment ({numPercentage}%)</td>
                 <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                  - ₹{calculatedAmount.toLocaleString("en-IN")}
+                  - ₹{numAmount.toLocaleString("en-IN")}
                 </td>
               </tr>
             </tbody>
@@ -254,7 +266,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-bold" style={{ color: "#991b1b" }}>Balance Left to Pay</span>
                 <span className="text-lg font-black" style={{ color: "#7f1d1d" }}>
-                  ₹{(quotation.price - calculatedAmount).toLocaleString("en-IN")}
+                  ₹{(quotation.price - numAmount).toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
@@ -263,7 +275,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               <div className="flex justify-between items-center mb-2">
                 <span className="text-lg font-bold" style={{ color: "#065f46" }}>Total Received</span>
                 <span className="text-2xl font-black" style={{ color: "#064e3b" }}>
-                  ₹{calculatedAmount.toLocaleString("en-IN")}
+                  ₹{numAmount.toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
@@ -277,14 +289,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Total Amount:</span>
-                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {calculatedAmount.toLocaleString("en-IN")}/-</span>
-              </div>
-              <div className="text-sm p-3" style={{ color: "#1e3a8a", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}>
-                <p className="font-bold mb-1" style={{ color: "#d97706" }}>Bank Details:</p>
-                <p className="m-0 font-bold">Digital Dictionary</p>
-                <p className="m-0">Axis Bank Bagdogra Branch</p>
-                <p className="m-0">Account No: <span className="font-bold">926020029844176</span></p>
-                <p className="m-0">IFSC Code: <span className="font-bold">UTIB0005857</span></p>
+                <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {numAmount.toLocaleString("en-IN")}/-</span>
               </div>
             </div>
             <div className="text-center flex flex-col items-center">
