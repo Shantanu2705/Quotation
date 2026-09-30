@@ -605,16 +605,16 @@ export default function QuotationDetailsPage() {
                     <span className="text-xl font-bold" style={{ color: "#1e3a8a" }}>Amount:</span>
                     <span className="text-2xl font-black" style={{ color: "#1e3a8a" }}>₹ {Number(formData.price).toLocaleString("en-IN")}/-</span>
                   </div>
-                  <div className="flex gap-4 items-stretch">
-                    <div className="text-sm p-3 flex-1" style={{ color: "#1e3a8a", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                  <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                    <div className="text-sm p-3" style={{ color: "#1e3a8a", backgroundColor: "#f8fafc", border: "1px solid #e2e8f0", width: "300px" }}>
                       <p className="font-bold mb-1" style={{ color: "#d97706" }}>Bank Details:</p>
                       <p className="m-0 font-bold">Digital Dictionary</p>
                       <p className="m-0">Axis Bank Bagdogra Branch</p>
                       <p className="m-0">Account No: <span className="font-bold">926020029844176</span></p>
                       <p className="m-0">IFSC Code: <span className="font-bold">UTIB0005857</span></p>
                     </div>
-                    <div className="p-2 border border-slate-200 bg-white rounded-md flex items-center justify-center shrink-0">
-                      <img src="/QR.jpeg" alt="QR Code" style={{ width: "90px", height: "90px", objectFit: "contain" }} />
+                    <div style={{ padding: "8px", border: "1px solid #e2e8f0", backgroundColor: "#ffffff", borderRadius: "6px" }}>
+                      <img src="/QR.jpeg" crossOrigin="anonymous" alt="QR Code" style={{ width: "90px", height: "90px", display: "block", objectFit: "contain" }} />
                     </div>
                   </div>
                 </div>
