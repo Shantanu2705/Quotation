@@ -19,6 +19,7 @@ interface AdvanceReceiptDialogProps {
 
 export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceReceiptDialogProps) {
   const [amount, setAmount] = useState<string>("");
+  const [totalPrice, setTotalPrice] = useState<string>("");
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addInvoice } = useInvoices();
@@ -29,6 +30,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
   useEffect(() => {
     if (open && quotation) {
       setAmount((quotation.price * 0.5).toString());
+      setTotalPrice(quotation.price.toString());
       setInvoiceNumber(`AR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
     }
   }, [open, quotation]);
@@ -36,7 +38,8 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
   if (!quotation) return null;
 
   const numAmount = Number(amount) || 0;
-  const numPercentage = quotation && quotation.price > 0 ? Number(((numAmount / quotation.price) * 100).toFixed(2)) : 0;
+  const numTotalPrice = Number(totalPrice) || (quotation?.price || 0);
+  const numPercentage = numTotalPrice > 0 ? Number(((numAmount / numTotalPrice) * 100).toFixed(2)) : 0;
 
   const handleGenerate = async () => {
     if (numAmount <= 0) {
@@ -66,9 +69,10 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
         customerName: quotation.customerName
       });
 
-      // 2. Update the quotation's payment status
+      // 2. Update the quotation's payment status and price
       await updateQuotation(quotation.id, {
-        paymentStatus: 'Advance Payment Confirmed'
+        paymentStatus: 'Advance Payment Confirmed',
+        price: numTotalPrice
       });
 
       // 3. Generate and download PDF
@@ -144,8 +148,13 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
 
           <div className="grid gap-6 py-4">
           <div className="flex justify-between items-center bg-muted/50 p-4 rounded-lg border">
-            <span className="text-sm font-medium text-muted-foreground">Total Quoted Price</span>
-            <span className="font-bold text-lg">₹{quotation.price.toLocaleString("en-IN")}</span>
+            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap mr-4">Total Quoted Price (₹)</span>
+            <Input 
+              type="number"
+              value={totalPrice}
+              onChange={(e) => setTotalPrice(e.target.value)}
+              className="font-bold text-lg text-right h-auto py-1 max-w-[150px]"
+            />
           </div>
 
           <div className="space-y-4">
@@ -175,7 +184,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
           
           <div className="flex justify-between items-center bg-red-50 p-4 rounded-lg border border-red-100">
             <span className="text-sm font-bold text-red-800">Balance Left to Pay</span>
-            <span className="font-black text-xl text-red-900">₹{(quotation.price - numAmount).toLocaleString("en-IN")}</span>
+            <span className="font-black text-xl text-red-900">₹{(numTotalPrice - numAmount).toLocaleString("en-IN")}</span>
           </div>
         </div>
 
@@ -249,7 +258,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               <tr>
                 <td className="py-4 px-4" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>Total Quoted Price for {quotation.serviceType}</td>
                 <td className="py-4 px-4 text-right font-medium" style={{ color: "#1e3a8a", borderBottom: "1px solid #b8860b" }}>
-                  ₹{quotation.price.toLocaleString("en-IN")}
+                  ₹{numTotalPrice.toLocaleString("en-IN")}
                 </td>
               </tr>
               <tr>
@@ -266,7 +275,7 @@ export function AdvanceReceiptDialog({ quotation, open, onOpenChange }: AdvanceR
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-bold" style={{ color: "#991b1b" }}>Balance Left to Pay</span>
                 <span className="text-lg font-black" style={{ color: "#7f1d1d" }}>
-                  ₹{(quotation.price - numAmount).toLocaleString("en-IN")}
+                  ₹{(numTotalPrice - numAmount).toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
