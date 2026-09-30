@@ -5,6 +5,7 @@ import { Quotation, useQuotations } from "@/hooks/useQuotations";
 import { useInvoices } from "@/hooks/useInvoices";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Loader2, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
