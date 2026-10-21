@@ -113,9 +113,8 @@ export const RenewalPdfTemplate = forwardRef<HTMLDivElement, RenewalPdfTemplateP
             >
               <div style={{ marginBottom: "6px" }}>
                 <img
-                  src="/logo.png?v=4"
+                  src="/logo.png"
                   alt="Digital Dictionary"
-                  crossOrigin="anonymous"
                   style={{
                     height: "52px",
                     width: "auto",

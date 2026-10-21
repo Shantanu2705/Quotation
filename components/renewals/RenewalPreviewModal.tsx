@@ -87,8 +87,8 @@ export function RenewalPreviewModal({
         </DialogHeader>
 
         {/* Scrollable Container with realistic A4 sheet view */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-muted/40 flex justify-center">
-          <div className="shadow-2xl rounded-sm overflow-hidden border border-border/80 bg-white scale-[0.8] sm:scale-100 origin-top my-2">
+        <div className="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-8 bg-muted/40 flex justify-center">
+          <div className="shadow-2xl rounded-sm overflow-hidden border border-border/80 bg-white my-2 shrink-0">
             <RenewalPdfTemplate ref={printRef} renewal={renewal} />
           </div>
         </div>

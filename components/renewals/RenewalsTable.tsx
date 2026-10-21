@@ -320,9 +320,18 @@ export function RenewalsTable({ renewals, loading }: RenewalsTableProps) {
 
       {/* Hidden print element for direct PDF export */}
       {activeDownloadRenewal && (
-        <div style={{ display: "none" }}>
+        <div
+          ref={printRef}
+          style={{
+            position: "fixed",
+            left: 0,
+            top: 0,
+            width: "794px",
+            zIndex: -9999,
+            pointerEvents: "none",
+          }}
+        >
           <RenewalPdfTemplate
-            ref={printRef}
             renewal={activeDownloadRenewal}
           />
         </div>

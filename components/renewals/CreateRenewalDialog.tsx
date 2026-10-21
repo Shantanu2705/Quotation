@@ -751,8 +751,18 @@ export function CreateRenewalDialog({
       </Dialog>
 
       {/* Hidden container for instant PDF export upon creation */}
-      <div style={{ display: "none" }}>
-        <RenewalPdfTemplate ref={hiddenPrintRef} renewal={previewRecord} />
+      <div
+        ref={hiddenPrintRef}
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "794px",
+          zIndex: -9999,
+          pointerEvents: "none",
+        }}
+      >
+        <RenewalPdfTemplate renewal={previewRecord} />
       </div>
     </>
   );

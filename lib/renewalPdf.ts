@@ -6,17 +6,27 @@ export async function generateRenewalPdf(
   element: HTMLElement,
   renewal: RenewalNotice
 ): Promise<void> {
+  const isCurrentlyHidden =
+    element.style.display === "none" ||
+    element.parentElement?.style.display === "none";
+
   const originalDisplay = element.style.display;
   const originalPosition = element.style.position;
   const originalLeft = element.style.left;
   const originalTop = element.style.top;
+  const originalZIndex = element.style.zIndex;
+  const originalPointerEvents = element.style.pointerEvents;
   const originalWidth = element.style.width;
 
-  element.style.display = "flex";
-  element.style.position = "absolute";
-  element.style.left = "-9999px";
-  element.style.top = "0";
-  element.style.width = "794px";
+  if (isCurrentlyHidden) {
+    element.style.display = "block";
+    element.style.position = "fixed";
+    element.style.left = "0";
+    element.style.top = "0";
+    element.style.zIndex = "-9999";
+    element.style.pointerEvents = "none";
+    element.style.width = "794px";
+  }
 
   try {
     const canvas = await html2canvas(element, {
@@ -24,9 +34,11 @@ export async function generateRenewalPdf(
       useCORS: true,
       logging: false,
       windowWidth: 794,
+      scrollX: 0,
+      scrollY: 0,
     });
 
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/jpeg", 0.98);
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
@@ -38,20 +50,18 @@ export async function generateRenewalPdf(
     const pageHeight = pdf.internal.pageSize.getHeight();
 
     if (pdfHeight <= pageHeight + 2) {
-      // Single page document
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
     } else {
-      // Multi-page document handling
       let heightLeft = pdfHeight;
       let position = 0;
 
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, pdfWidth, pdfHeight);
       heightLeft -= pageHeight;
 
       while (heightLeft > 0) {
         position = heightLeft - pdfHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        pdf.addImage(imgData, "JPEG", 0, position, pdfWidth, pdfHeight);
         heightLeft -= pageHeight;
       }
     }
@@ -62,10 +72,14 @@ export async function generateRenewalPdf(
 
     pdf.save(cleanFilename);
   } finally {
-    element.style.display = originalDisplay;
-    element.style.position = originalPosition;
-    element.style.left = originalLeft;
-    element.style.top = originalTop;
-    element.style.width = originalWidth;
+    if (isCurrentlyHidden) {
+      element.style.display = originalDisplay;
+      element.style.position = originalPosition;
+      element.style.left = originalLeft;
+      element.style.top = originalTop;
+      element.style.zIndex = originalZIndex;
+      element.style.pointerEvents = originalPointerEvents;
+      element.style.width = originalWidth;
+    }
   }
 }
