@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
+  RotateCcw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const menuItems = [
   { name: "Enquiries", href: "/dashboard/enquiries", icon: MessageSquare },
   { name: "Quotations", href: "/dashboard/quotations", icon: FileText },
   { name: "Billing", href: "/dashboard/billing", icon: CreditCard },
+  { name: "Renewal", href: "/dashboard/renewals", icon: RotateCcw },
   { name: "Templates", href: "/dashboard/templates", icon: BookOpen },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
